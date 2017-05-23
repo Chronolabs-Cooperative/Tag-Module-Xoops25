@@ -1,4 +1,4 @@
-#Tag Module for XOOPS 2.5
+﻿#Tag Module for XOOPS 2.5
 
 ##Version 2.xx (Still in Development)
 
