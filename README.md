@@ -8,6 +8,21 @@ This module provides a centralized toolkit including input, display, stats and s
 
 Check http://en.wikipedia.org/wiki/Tags for more info about "tag"
 
+# Shortened Search Engine Friendly URLS (mod_rewrite)
+
+The following goes in the .htaccess if your running apache2 in the XOOPS_ROOT_PATH
+
+    RewriteEngine On
+    RewriteRule ^tags/index.html                  					./modules/tag/index.php                           			[L,NC,QSA]
+    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/([0-9]+).html     			./modules/tag/$1.$2.php?start=$3&termid=$4              		[L,NC,QSA]
+    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/([0-9]+)/([0-9]+).html     	./modules/tag/$1.$2.php?start=$3&catid=$4&termid=$5       		[L,NC,QSA]
+    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/([0-9]+)-(.*?).html     		./modules/tag/$1.$2.php?start=$3&termid=$4&dirname=$5           	[L,NC,QSA]
+    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/([0-9]+)/([0-9]+)-(.*?).html   	./modules/tag/$1.$2.php?start=$3&catid=$4&termid=$5&dirname=$6       	[L,NC,QSA]
+    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(.*?).html     			./modules/tag/$1.$2.php?start=$3&term=$4              			[L,NC,QSA]
+    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/([0-9]+)/(.*?).html     		./modules/tag/$1.$2.php?start=$3&catid=$4&term=$5       		[L,NC,QSA]
+    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(.*?)-(.*?).html     		./modules/tag/$1.$2.php?start=$3&term=$4&dirname=$5           		[L,NC,QSA]
+    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/([0-9]+)/(.*?)-(.*?).html     	./modules/tag/$1.$2.php?start=$3&catid=$4&term=$5&dirname=$6       	[L,NC,QSA]
+
 # Usage of the Tag Module in your XOOPS Module
 
 To enable tag for a module ("mymodule"), following steps are need:
