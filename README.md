@@ -1,5 +1,7 @@
 #Tag Module for XOOPS 2.5
+
 ##Version 2.xx (Still in Development)
+
 ### Author: Simon Roberts <simon@snails.email>
 
 This module provides a centralized toolkit including input, display, stats and substantial more comprehensive applications, so that each module does not need to develop its own tag handling scripts.
@@ -7,6 +9,7 @@ This module provides a centralized toolkit including input, display, stats and s
 Check http://en.wikipedia.org/wiki/Tags for more info about "tag"
 
 #Usage of the Tag Module in your XOOPS Module
+
 To enable tag for a module ("mymodule"), following steps are need:
 * add tag input box to your item edit form (required)
 * add tag storage to your item submission page (required)
@@ -16,6 +19,7 @@ To enable tag for a module ("mymodule"), following steps are need:
 * add module tag blocks (optional) 
 
 ##Step 1: add tag input box
+
 This is how you would set up an inclusion of the tag module in an itemised edit form in your module, this is not explicit example and could have variegates for the module you are writing or editing.
 
     // File: edit.item.php
@@ -24,6 +28,7 @@ This is how you would set up an inclusion of the tag module in an itemised edit 
     $form_item->addElement(new XoopsFormTag("item_tag", 60, 255, $itemid, $catid = 0));
 
 ##Step 2: add tag storage after item storage
+
 This is how you would set up an inclusion of the tag module in an itemised submition form in your module, this is not explicit example and could have variegates for the module you are writing or editing.
 
     // File: submit.item.php
@@ -31,10 +36,12 @@ This is how you would set up an inclusion of the tag module in an itemised submi
     $tag_handler->updateByItem($_POST["item_tag"], $itemid, $xoopsModule->getVar("dirname"), $catid = 0);
 
 ##Step 3: define functions to build info of tagged items of module
+
 This is the plugin for the tag module to enable the taging in both the tag module and the module you are writing/editing!
 Editing File Example: /modules/tag/plugin/mymodule.php
 
 ###Get item fields: title, content, time, link, uid, uname, tags
+
     function mymodule_tag_iteminfo(&$items)
     {
         $items_id = array();
@@ -66,20 +73,25 @@ Editing File Example: /modules/tag/plugin/mymodule.php
     }
 
 ###Remove orphan tag-item links
+
     function mymodule_tag_synchronization($mid) 
     {
         // Optional
     }
 
 ###Get's category catid data for module
+
 ###Get item fields: catid, parentid, term
+
     function mymodule_tag_category($catid) 
     {
         return array('catid'->0, 'parentid' =>0, 'term' =>0);
     }
 
 ##Step 4: Display tags on our tiem page
+
 These files are not explicit as filenames they could be different this is how to display the tag in the item of the module you are editing/writing.
+
 ###File: view.item.php
 
     include_once XOOPS_ROOT_PATH."/modules/tag/include/tagbar.php";
@@ -90,22 +102,33 @@ These files are not explicit as filenames they could be different this is how to
     <{include file="db:tag_bar.html"}>
 
 ##Step 5: create tag list page and tag view page and for categories as well
+
 This is the files that belong in /modules/mymodule/xxxx.xxx.php for redirecting or displaying within your module the tag lists and views as well as categories
+
 ###File: list.tag.php
+
      include "header.php";
      include XOOPS_ROOT_PATH . "/modules/tag/list.tag.php";
+
 ###File: view.tag.php
+
      include "header.php";
      include XOOPS_ROOT_PATH . "/modules/tag/view.tag.php";
+
 ###File: list.cat.php
+
      include "header.php";
      include XOOPS_ROOT_PATH . "/modules/tag/list.cat.php";
+
 ###File: view.cat.php
+
      include "header.php";
      include XOOPS_ROOT_PATH . "/modules/tag/view.cat.php";
 
 ##Step 6: create tag blocks
+
 This is where you create the blocks you will have to edit and create files for this within your module
+
 ###File: xoops_version.php
 
      /*
@@ -153,7 +176,9 @@ This is where you create the blocks you will have to edit and create files for t
          "options"        => "",
          "template"        => "mymodule_tag_block_cumulus.html",
          );
+
 ###File: mymodule_block_tag.php
+
 This file belongs in /modules/mymodule/blocks and is adjustable in function names and filename in the xoops_version.php as seen in the example above.
 
      function mymodule_tag_block_cloud_show($options) 
@@ -178,6 +203,7 @@ This file belongs in /modules/mymodule/blocks and is adjustable in function name
      }
 
 ###File: mymodule_block_cumulus.php
+
 This file belongs in /modules/mymodule/blocks and is adjustable in function names and filename in the xoops_version.php as seen in the example above.
 
      function mymodule_tag_block_cumulus_show($options) 
@@ -192,16 +218,19 @@ This file belongs in /modules/mymodule/blocks and is adjustable in function name
      }
 
 ###File: mymodule_tag_block_cloud.html
+
 This file belongs in /modules/mymodule/templates/blocks and is adjustable in function names and filename in the xoops_version.php as seen in the example above.
 
      <{include file="db:tag_block_cloud.html"}>
 
 ###File: mymodule_tag_block_top.html
+
 This file belongs in /modules/mymodule/templates/blocks and is adjustable in function names and filename in the xoops_version.php as seen in the example above.
 
      <{include file="db:tag_block_top.html"}>
 
 ###File: mymodule_tag_block_cumulus.html
+
 This file belongs in /modules/mymodule/templates/blocks and is adjustable in function names and filename in the xoops_version.php as seen in the example above.
 
      <{include file="db:tag_block_cumulus.html"}>
