@@ -26,12 +26,14 @@ include_once __DIR__ . '/header.php';
 xoops_cp_header();
 
 xoops_load("XoopsFormLoader");
-xoops_load('XoopsPageNav');
 
 $indexAdmin = new ModuleAdmin();
 
 echo $indexAdmin->addNavigation(basename(__FILE__));
 echo $indexAdmin->renderIndex();
+
+include XOOPS_ROOT_PATH . "/modules/tag/include/vars.php";
+echo function_exists("loadModuleAdminMenu") ? loadModuleAdminMenu(1) : "";
 
 $limit = 10;
 $modid = intval( empty($_GET['modid']) ? @$_POST['modid'] : $_GET['modid'] );
@@ -87,29 +89,61 @@ $status_select->addOption(1, TAG_AM_INACTIVE);
 $tray->addElement($status_select);
 $tray->addElement(new XoopsFormButton("", "submit", _SUBMIT, "submit"));
 $opform->addElement($tray);
-$GLOBALS['xoopsTpl']->assign("opform", $opform->render());
-$GLOBALS['xoopsTpl']->assign("formuri", $_SERVER["PHP_SELF"]);
+$opform->display();
 
 $criteria = new CriteriaCompo();
 $criteria->setSort("a");
 $criteria->setOrder("ASC");
-if ($status >= 0) {
-	$criteria->add( new Criteria("o.tag_status", $status) );
-}
-if (!empty($modid)) {
-	$criteria->add( new Criteria("l.tag_modid", $modid) );
-}
-$count_tag = $tag_handler->getCount($criteria);
-$nav = new XoopsPageNav($count_tag, $limit, $start, "start", "modid={$modid}&amp;status={$status}");
-$GLOBALS['xoopsTpl']->assign('pagenav', $nav->renderNav(4));
 $criteria->setStart($start);
 $criteria->setLimit($limit);
-$GLOBALS['xoopsTpl']->assign('tags', $tag_handler->getByLimit($criteria, false));
-$GLOBALS['xoopsTpl']->assign('modid', $modid);
-$GLOBALS['xoopsTpl']->assign('start', $start);
-$GLOBALS['xoopsTpl']->assign('status', $status);
+if ($status >= 0) {
+    $criteria->add( new Criteria("o.tag_status", $status) );
+}
+if (!empty($modid)) {
+    $criteria->add( new Criteria("l.tag_modid", $modid) );
+}
+$tags = $tag_handler->getByLimit($criteria, false);
 
-echo $GLOBALS['xoopsTpl']->display(dirname(__DIR__) . '/templates/admin/tag_admin.html');
+$form_tags = "<form name='tags' method='post' action='" . xoops_getenv("PHP_SELF") . "'>";
+$form_tags .= "<table border='0' cellpadding='4' cellspacing='1' width='100%' class='outer'>";
+$form_tags .= "<tr align='center'>";
+$form_tags .= "<td class='bg3'>" . TAG_AM_TERM . "</td>";
+$form_tags .= "<td class='bg3' width='10%'>" . TAG_AM_ACTIVE . "</td>";
+$form_tags .= "<td class='bg3' width='10%'>" . TAG_AM_INACTIVE . "</td>";
+$form_tags .= "<td class='bg3' width='10%'>" . _DELETE . "</td>";
+$form_tags .= "</tr>";
+if (empty($tags)) {
+    $form_tags .= "<tr><td colspan='4'>" . _NONE . "</td></tr>";
+} else {
+    $class_tr = array("odd", "even");
+    $i = 0;
+    foreach (array_keys($tags) as $key) {
+        $form_tags .= "<tr class='" . $class_tr[(++$i) % 2] . "'>";
+        $form_tags .= "<td>" . $tags[$key]["term"] . "</td>";
+        $form_tags .= "<td><input type='radio' name='tags[{$key}]' value='0' " . ( $tags[$key]["status"] ? "" : " 'checked' ") . "></td>";
+        $form_tags .= "<td><input type='radio' name='tags[{$key}]' value='1' " . ( $tags[$key]["status"] ? " 'checked' " : "") . "></td>";
+        $form_tags .= "<td><input type='radio' name='tags[{$key}]' value='-1'></td>";
+        $form_tags .= "</tr>";
+    }
+    if (  !empty($start) || count($tags) >= $limit ) {
+        $count_tag = $tag_handler->getCount($criteria);
+    
+        include XOOPS_ROOT_PATH . "/class/pagenav.php";
+        $nav = new XoopsPageNav($count_tag, $limit, $start, "start", "modid={$modid}&amp;status={$status}");
+        $form_tags .= "<tr><td colspan='4' align='right'>" . $nav->renderNav(4) . "</td></tr>";
+    }
+    $form_tags .= "<tr><td colspan='4' align='center'>";
+    $form_tags .= "<input type='hidden' name='status' value='{$status}'> ";
+    $form_tags .= "<input type='hidden' name='start' value='{$start}'> ";
+    $form_tags .= "<input type='hidden' name='modid' value='{$modid}'> ";
+    $form_tags .= "<input type='submit' name='submit' value='" . _SUBMIT . "'> ";
+    $form_tags .= "<input type='reset' name='submit' value='" . _CANCEL . "'>";
+    $form_tags .= "</td></tr>";
+}
+$form_tags .= "</table>";
+$form_tags .= "</form>";
+
+echo $form_tags;
 
 include_once __DIR__ . '/footer.php';
 ?>

@@ -1,0 +1,11 @@
+RewriteEngine On
+RewriteRule ^%base%/index%html%                  										./modules/tag/index.php                           					[L,NC,QSA]
+RewriteRule ^%base%/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)%html%     		./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&termid=$7   					[L,NC,QSA]
+RewriteRule ^%base%/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/([0-9]+)%html%     	./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$7&termid=$8       					[L,NC,QSA]
+RewriteRule ^%base%/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)-(.*?)%html%     		./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&termid=$7&dirname=$8           			[L,NC,QSA]
+RewriteRule ^%base%/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/([0-9]+)-(.*?)%html%  	./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$4&termid=$7&dirname=$8       		[L,NC,QSA]
+RewriteRule ^%base%/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/(.*?)%html%     			./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&term=$7              					[L,NC,QSA]
+RewriteRule ^%base%/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/(.*?)%html%     		./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$7&term=$8       					[L,NC,QSA]
+RewriteRule ^%base%/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/(.*?)-(.*?)%html%     		./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&term=$7&dirname=$8           			[L,NC,QSA]
+RewriteRule ^%base%/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/(.*?)-(.*?)%html%     	./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$7&term=$8&dirname=$9       			[L,NC,QSA]
+

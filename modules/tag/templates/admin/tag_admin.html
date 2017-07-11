@@ -1,0 +1,41 @@
+<h1><{$smarty.const.TAG_AM_ADMIN_H1}></h1>
+<p><{$smarty.const.TAG_AM_ADMIN_P1}></p>
+<p style="margin-left: 75px; margin-right: 75px; margin-top: 15px; margin-bottom: 25px;"><{$opform}></p>
+<form name='tags' method='post' action='<{$formuri}>'>
+	<table border='0' cellpadding='4' cellspacing='1' width='100%' class='outer' style="margin-left: 75px; margin-right: 75px; margin-top: 15px; margin-bottom: 25px;">
+		<tr align='center'>
+			<td class='bg3'><{$smarty.const.TAG_AM_TERM}></td>
+			<td class='bg3' width='10%'><{$smarty.const.TAG_AM_ACTIVE}></td>
+			<td class='bg3' width='10%'><{$smarty.const.TAG_AM_INACTIVE}></td>
+			<td class='bg3' width='10%'><{$smarty.const._DELETE}></td>
+		</tr>
+		<{if empty($this->_tpl['tags'])}>
+    	<tr>
+    		<td colspan='4'><{$smarty.const._NONE}></td>
+    	</tr>
+		<{else}>
+		<tr>
+    		<td colspan='4' align='right'><{$pagenav}></td>
+    	</tr>
+    	<{foreach from=$tags key=key item=tag}>
+        <tr class='<{cycle values="even,odd"}>'>
+        	<td><{$tag.term}></td>
+        	<td><input type='radio' name='tags[<{$key}>]' value='0' <{if $tag.status}><{else}>checked<{/if}>></td>
+        	<td><input type='radio' name='tags[<{$key}>]' value='1' <{if $tag.status}><{else}>checked<{/if}>></td>
+        	<td><input type='radio' name='tags[<{$key}>]' value='-1'></td>
+        </tr>
+        <{/foreach}>
+    	<tr>
+    		<td colspan='4' align='left'><{$pagenav}></td>
+    	</tr>
+    	<tr>
+    		<td colspan='4' align='center'>
+			    <input type='hidden' name='status' value='<{$status}>'>
+			    <input type='hidden' name='start' value='<{$start}>'>
+			    <input type='hidden' name='modid' value='<{$modid}>'>
+			    <input type='submit' name='submit' value='<{$smarty.const._SUBMIT}>'>
+			    <input type='reset' name='submit' value='<{$smarty.const._CANCEL}>'>
+    		</td>
+    	</tr>
+	</table>
+</form>

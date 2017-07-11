@@ -30,5 +30,8 @@ define("TAG_AM_IN_PROCESS","Data synchronization is in process, please wait for 
 define("TAG_AM_FINISHED","Data synchronization is finished.");
 
 // Tag version 3.01
-
+define("TAG_AM_HTACCESS_H1", ".htaccess sample");
+define("TAG_AM_HTACCESS_P1", "The following code goes in <strong><em>".XOOPS_ROOT_PATH.DIRECTORY_SEPARATOR.".htaccess</em></strong> as lines listed for the mod rewrite paths for apache, you also have to run on the service:<br/><br><pre>$ a2enmod rewrite</pre><br/>to enable the module within apache 2!");
+define("TAG_AM_ADMIN_H1", "Tag Administration");
+define("TAG_AM_ADMIN_P1", "From here you can delete as well as enable and disable tags in the database, the following drill down list provides the listing of tags on the service to configure!");
 ?>

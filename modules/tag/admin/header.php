@@ -22,6 +22,8 @@
  * @link			http://internetfounder.wordpress.com
  */
 
+include dirname(__DIR__) . "/include/vars.php";
+include_once dirname(__DIR__) . "/include/functions.php";
 $path = dirname(dirname(dirname(__DIR__)));
 include_once dirname(__DIR__) . '/header.php';
 include_once $path . '/include/cp_functions.php';
@@ -57,4 +59,28 @@ if (!isset($GLOBALS['xoopsTpl']) || !is_object($GLOBALS['xoopsTpl'])) {
 	include_once $GLOBALS['xoops']->path('/class/template.php');
 	$GLOBALS['xoopsTpl'] = new XoopsTpl();
 }
+
+
+global $tagModule, $tagConfigsList, $tagConfigs, $tagConfigsOptions;
+
+if (empty($tagModule))
+{
+	if (is_a($tagModule = xoops_getHandler('module')->getByDirname(basename(__DIR__)), "XoopsModule"))
+	{
+		if (empty($tagConfigsList))
+		{
+			$tagConfigsList = tag_load_config();
+		}
+		if (empty($tagConfigs))
+		{
+			$tagConfigs = xoops_getHandler('config')->getConfigs(new Criteria('conf_modid', $tagModule->getVar('mid')));
+		}
+		if (empty($tagConfigsOptions) && !empty($tagConfigs))
+		{
+			foreach($tagConfigs as $key => $config)
+				$tagConfigsOptions[$config->getVar('conf_name')] = $config->getConfOptions();
+		}
+	}
+}
+
 ?>
