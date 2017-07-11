@@ -20,4 +20,20 @@ define("TAG_MB_SORT", "Sort Criteria");
 define("TAG_MB_ALPHABET", "Alphabet");
 define("TAG_MB_COUNT", "Item count");
 define("TAG_MB_TIME", "Time");
+
+
+define("TAG_MB_ITEMS", "Number to display");
+define("TAG_MB_FONTSIZE_MAX", "Maximum font-size(%) for display");
+define("TAG_MB_FONTSIZE_MIN", "Minimum font-size(%) for display");
+define("TAG_MB_TIME_DURATION", "Time duration for stats, in days");
+define("TAG_MB_FLASH_TRANSPARENCY", "flash transparency");
+define("TAG_MB_FLASH_WIDTH", "flash width");
+define("TAG_MB_FLASH_HEIGHT", "flash height");
+define("TAG_MB_FLASH_BACKGROUND", "flash background");
+define("TAG_MB_FLASH_TRANSPARENT","transparent");
+define("TAG_MB_FLASH_MINFONTCOLOR","min font color");
+define("TAG_MB_FLASH_MAXFONTCOLOR","max font color");
+define("TAG_MB_FLASH_HILIGHTFONTCOLOR","font hilight color");
+define("TAG_MB_FLASH_SPEED","flash speed");
+
 ?>

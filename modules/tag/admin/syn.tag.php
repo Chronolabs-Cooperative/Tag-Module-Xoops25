@@ -22,10 +22,14 @@
  * @link			http://internetfounder.wordpress.com
  */
 
-include 'header.php';
-require_once XOOPS_ROOT_PATH . "/class/xoopsformloader.php";
-
+include_once __DIR__ . '/header.php';
 xoops_cp_header();
+
+xoops_load("XoopsFormLoader");
+$indexAdmin = new ModuleAdmin();
+
+echo $indexAdmin->addNavigation(basename(__FILE__));
+echo $indexAdmin->renderIndex();
 
 include XOOPS_ROOT_PATH . "/modules/tag/include/vars.php";
 echo function_exists("loadModuleAdminMenu") ? loadModuleAdminMenu(2) : "";
@@ -93,5 +97,5 @@ if ( isset($_GET['start']) ) {
     }
 }
 
-xoops_cp_footer();
+include_once __DIR__ . '/footer.php';
 ?>

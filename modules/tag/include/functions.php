@@ -30,6 +30,165 @@ define("TAG_FUNCTIONS",1);
 
 include XOOPS_ROOT_PATH . "/modules/tag/include/vars.php";
 
+
+function tag_load_config()
+{
+	global $xoopsModuleConfig;
+	static $moduleConfig;
+	
+	if (isset($moduleConfig)) {
+		return $moduleConfig;
+	}
+	
+	if (isset($GLOBALS["xoopsModule"]) && is_object($GLOBALS["xoopsModule"]) && $GLOBALS["xoopsModule"]->getVar("dirname", "n") == "tag") {
+		if (!empty($GLOBALS["xoopsModuleConfig"])) {
+			$moduleConfig = $GLOBALS["xoopsModuleConfig"];
+		} else {
+			return null;
+		}
+	} else {
+		$module_handler =& xoops_gethandler('module');
+		$module = $module_handler->getByDirname("tag");
+		
+		$config_handler =& xoops_gethandler('config');
+		$criteria = new CriteriaCompo(new Criteria('conf_modid', $module->getVar('mid')));
+		$configs = $config_handler->getConfigs($criteria);
+		foreach (array_keys($configs) as $i) {
+			$moduleConfig[$configs[$i]->getVar('conf_name')] = $configs[$i]->getConfValueForOutput();
+		}
+		unset($configs);
+	}
+	if ($customConfig = @include XOOPS_ROOT_PATH . "/modules/tag/include/plugin.php") {
+		$moduleConfig = array_merge($moduleConfig, $customConfig);
+	}
+	
+	return $moduleConfig;
+}
+
+function tag_define_url_delimiter()
+{
+	if (defined("URL_DELIMITER")) {
+		if (!in_array(URL_DELIMITER, array("?","/"))) die("Exit on security");
+	} else {
+		$moduleConfig = tag_load_config();
+		if (empty($moduleConfig["do_urw"])) {
+			define("URL_DELIMITER", "?");
+		} else {
+			define("URL_DELIMITER", "/");
+		}
+	}
+}
+
+function tag_get_delimiter()
+{
+	xoops_loadLanguage("config", "tag");
+	if (!empty($GLOBALS["tag_delimiter"])) return $GLOBALS["tag_delimiter"];
+	$moduleConfig = tag_load_config();
+	if (!empty($moduleConfig["tag_delimiter"])) return $moduleConfig["tag_delimiter"];
+	return array(",", " ", "|", ";");
+}
+
+
+function tag_synchronization()
+{
+	$module_handler =& xoops_gethandler("module");
+	$criteria = new CriteriaCompo(new Criteria("isactive", 1));
+	$criteria->add(new Criteria("dirname", "('system', 'tag')", "NOT IN"));
+	$modules_obj = $module_handler->getObjects($criteria, true);
+	
+	$link_handler =& xoops_getmodulehandler("link", "tag");
+	$link_handler->deleteAll(new Criteria("tag_modid", "(" . implode(", ", array_keys($modules_obj)) . ")", "NOT IN"), true);
+	
+	foreach(array_keys($modules_obj) as $mid) {
+		$dirname = $modules_obj[$mid]->getVar("dirname");
+		if (!@include_once XOOPS_ROOT_PATH . "/modules/{$dirname}/include/plugin.tag.php") {
+			if (!@include_once XOOPS_ROOT_PATH . "/modules/tag/plugin/{$dirname}.php") {
+				continue;
+			}
+		}
+		$func_tag = "{$dirname}_tag_synchronization";
+		if (!function_exists($func_tag)) {
+			continue;
+		}
+		$res = $func_tag($mid);
+	}
+	
+	tag_cleanOrphan();
+	return true;
+}
+
+function tag_cleanOrphan()
+{
+	$tag_handler =& xoops_getmodulehandler("tag", "tag");
+	
+	/* clear item-tag links */
+	if (version_compare( mysql_get_server_info(), "4.1.0", "ge" )):
+	$sql =  "DELETE FROM {$tag_handler->table_link}" .
+	" WHERE ({$tag_handler->keyName} NOT IN ( SELECT DISTINCT {$tag_handler->keyName} FROM {$tag_handler->table}) )";
+	else:
+	$sql =  "DELETE {$tag_handler->table_link} FROM {$tag_handler->table_link}" .
+	" LEFT JOIN {$tag_handler->table} AS aa ON {$tag_handler->table_link}.{$tag_handler->keyName} = aa.{$tag_handler->keyName} " .
+	" WHERE (aa.{$tag_handler->keyName} IS NULL)";
+	endif;
+	if (!$result = $tag_handler->db->queryF($sql)) {
+		//xoops_error($tag_handler->db->error());
+	}
+	
+	/* remove empty stats-tag links */
+	$sql = "DELETE FROM {$tag_handler->table_stats}" .
+	" WHERE tag_count = 0";
+	if (!$result = $tag_handler->db->queryF($sql)) {
+		//xoops_error($tag_handler->db->error());
+	}
+	
+	/* clear stats-tag links */
+	if (version_compare( mysql_get_server_info(), "4.1.0", "ge" )):
+	$sql =  "DELETE FROM {$tag_handler->table_stats}" .
+	" WHERE ({$tag_handler->keyName} NOT IN ( SELECT DISTINCT {$tag_handler->keyName} FROM {$tag_handler->table}) )";
+	else:
+	$sql =  "DELETE {$tag_handler->table_stats} FROM {$tag_handler->table_stats}".
+			" LEFT JOIN {$tag_handler->table} AS aa ON {$tag_handler->table_stats}.{$tag_handler->keyName} = aa.{$tag_handler->keyName} " .
+			" WHERE (aa.{$tag_handler->keyName} IS NULL)";
+	endif;
+	if (!$result = $tag_handler->db->queryF($sql)) {
+		//xoops_error($tag_handler->db->error());
+	}
+	
+	if (version_compare( mysql_get_server_info(), "4.1.0", "ge" )):
+	$sql =  "    DELETE FROM {$tag_handler->table_stats}" .
+	"    WHERE NOT EXISTS ( SELECT * FROM {$tag_handler->table_link} " .
+	"                       WHERE  {$tag_handler->table_link}.tag_modid={$tag_handler->table_stats}.tag_modid" .
+	"                       AND  {$tag_handler->table_link}.tag_catid={$tag_handler->table_stats}.tag_catid" .
+	"                     )";
+	else:
+	$sql =  "DELETE {$tag_handler->table_stats} FROM {$tag_handler->table_stats}" .
+	" LEFT JOIN {$tag_handler->table_link} AS aa ON (" .
+	"                                            {$tag_handler->table_stats}.{$tag_handler->keyName} = aa.{$tag_handler->keyName} " .
+	"                                            AND {$tag_handler->table_stats}.tag_modid = aa.tag_modid " .
+	"                                            AND {$tag_handler->table_stats}.tag_catid = aa.tag_catid " .
+	"                                        ) " .
+	" WHERE (aa.tl_id IS NULL)";
+	endif;
+	if (!$result = $tag_handler->db->queryF($sql)) {
+		//xoops_error($tag_handler->db->error());
+	}
+	
+	/* clear empty tags */
+	if (version_compare( mysql_get_server_info(), "4.1.0", "ge" )):
+	$sql =  "DELETE FROM {$tag_handler->table}" .
+	" WHERE ({$tag_handler->keyName} NOT IN ( SELECT DISTINCT {$tag_handler->keyName} FROM {$tag_handler->table_link}) )";
+	else:
+	$sql =  "DELETE {$tag_handler->table} FROM {$tag_handler->table}" .
+	" LEFT JOIN {$tag_handler->table_link} AS aa ON {$tag_handler->table_link}.{$tag_handler->keyName} = aa.{$tag_handler->keyName} " .
+	" WHERE (aa.tl_id IS NULL)";
+	endif;
+	if (!$result = $tag_handler->db->queryF($sql)) {
+		//xoops_error($tag_handler->db->error());
+	}
+	
+	return true;
+}
+
 function &tag_getTagHandler()
 {
     static $tag_handler;
@@ -113,5 +272,10 @@ function tag_parse_tag($text_tag)
     return $tags;
 }
 
+
+function tag_parse_category($catid)
+{	
+	return array();
+}
 endif;
 ?>

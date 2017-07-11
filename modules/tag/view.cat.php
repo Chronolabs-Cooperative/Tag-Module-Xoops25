@@ -22,6 +22,9 @@
  * @link			http://internetfounder.wordpress.com
  */
 
+global $tagModule, $tagConfigsList, $tagConfigs, $tagConfigsOptions;
+global $modid, $term, $termid, $catid, $start, $sort, $order, $mode;
+
 include dirname(__FILE__) . "/header.php";
 
 if (!is_object($GLOBALS["xoopsModule"]) || "tag" != $GLOBALS["xoopsModule"]->getVar("dirname", "n")) {
@@ -76,6 +79,8 @@ if (!empty($tag_desc)) {
 $xoopsOption["template_main"] = "tag_view.html";
 $xoopsOption["xoops_pagetitle"] = strip_tags($page_title);
 include XOOPS_ROOT_PATH . "/header.php";
+// Adds Stylesheet
+$GLOBALS['xoTheme']->addStylesheet(XOOPS_URL."/modules/tag/language/".$GLOBALS['xoopsConfig']['language'].'/style.css');
 
 $tag_config = tag_load_config();
 tag_define_url_delimiter();

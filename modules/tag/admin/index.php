@@ -22,9 +22,13 @@
  * @link			http://internetfounder.wordpress.com
  */
 
-include 'header.php';
-
+include_once __DIR__ . '/header.php';
 xoops_cp_header();
+
+$indexAdmin = new ModuleAdmin();
+
+echo $indexAdmin->addNavigation(basename(__FILE__));
+echo $indexAdmin->renderIndex();
 
 include XOOPS_ROOT_PATH . "/modules/tag/include/vars.php";
 echo function_exists("loadModuleAdminMenu") ? loadModuleAdminMenu(0) : "";
@@ -88,5 +92,6 @@ $output .= "</div>";
 $output .= "</fieldset>";
 
 echo $output;
-xoops_cp_footer();
+
+include_once __DIR__ . '/footer.php';
 ?>

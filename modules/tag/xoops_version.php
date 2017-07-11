@@ -81,13 +81,22 @@ $modversion["tables"] 					= array(
     											"tag_stats",
 											);
 
-// Admin things
-$modversion["hasAdmin"] 				= TAG_MI_HASADMIN;
-$modversion["adminindex"] 				= "admin/index.php";
-$modversion["adminmenu"] 				= "admin/menu.php";
+// Main
+$modversion['hasMain'] 					= TAG_MI_MODULE_HASMAIN;
 
-// Menu
-$modversion["hasMain"] 					= TAG_MI_HASMAIN;
+// Admin
+$modversion['hasAdmin'] 				= TAG_MI_MODULE_HASADMIN;
+$modversion['adminindex']  				= "admin/index.php";
+$modversion['adminmenu']   				= "admin/menu.php";
+$modversion['system_menu'] 				= 1;
+
+// Search
+$modversion["hasSearch"] 				= TAG_MI_MODULE_HASSEARCH;
+$modversion['search']['file'] 			= "include/search.inc.php";
+$modversion['search']['func'] 			= "tag_search";
+
+// Comments
+$modversion["hasComments"] 				= TAG_MI_MODULE_HASCOMMENTS;
 
 $modversion["onInstall"] 				= "include/action.module.php";
 $modversion["onUpdate"] 				= "include/action.module.php";
@@ -117,13 +126,13 @@ $modversion['templates'][]    			= array(
 											    'description'   => 'Tag list in an item'
     										);
 $modversion['templates'][]    			= array(
-													'file'          => 'tag_category_list.html',
-													'description'   => 'List of tags'
+												'file'          => 'tag_category_list.html',
+												'description'   => 'List of tags'
 											);
 $modversion['templates'][]    			= array(
 												'file'          => 'tag_category_view.html',
 												'description'   => 'Links of a tag'
-										);
+											);
 // Blocks
 $modversion['blocks']    				= array();
 
@@ -159,25 +168,75 @@ $modversion["blocks"][]    				= array(
 											    "template"      => "tag_block_top.html",
     										);
 
-// Search
-$modversion["hasSearch"] 				= TAG_MI_HASSEARCH;
-$modversion['search']['file'] 			= "include/search.inc.php";
-$modversion['search']['func'] 			= "tag_search";
 
-// Comments
-$modversion["hasComments"] 				= 0;
+// Blocks
+$modversion['blocks']    = array();
+
+/*
+ * $options for cumulus:
+ *                    $options[0] - number of tags to display
+ *                    $options[1] - time duration
+ *                    $options[2] - max font size (px or %)
+ *                    $options[3] - min font size (px or %)
+ *                    $options[4] - cumulus_flash_width
+ *                    $options[5] - cumulus_flash_height
+ *                    $options[6] - cumulus_flash_background
+ *                    $options[7] - cumulus_flash_transparency
+ *                    $options[8] - cumulus_flash_min_font_color
+ *                    $options[9] - cumulus_flash_max_font_color
+ *                    $options[10] - cumulus_flash_hicolor
+ *                    $options[11] - cumulus_flash_speed
+ */
+$modversion["blocks"][]    				= 	array(
+												"file"          => "block.php",
+												"name"          => TAG_MI_BLOCK_CUMULUS,
+												"description"   => TAG_MI_BLOCK_CUMULUS_DESC,
+												"show_func"     => "tag_block_cumulus_show",
+												"edit_func"     => "tag_block_cumulus_edit",
+												"options"       => "100|0|24|12|160|140|#ffffff|0|#000000|#003300|#00ff00|100",
+												"template"      => "tag_block_cumulus.html",
+											);
+
+// Config categories
+$modversion['configcat']['seo']['name']        = TAG_MI_CONFCAT_SEO;
+$modversion['configcat']['seo']['description'] = TAG_MI_CONFCAT_SEO_DESC;
+
+$modversion['configcat']['mod']['name']        = TAG_MI_CONFCAT_MODULE;
+$modversion['configcat']['mod']['description'] = TAG_MI_CONFCAT_MODULE_DESC;
+
 
 // Configs
 $modversion["config"] 					= array();
     
-$modversion["config"][1] 				= array(
-											    "name"          => "do_urw",
-											    "title"         => "TAG_MI_DOURLREWRITE",
-											    "description"   => "TAG_MI_DOURLREWRITE_DESC",
+$modversion["config"][] 				= array(
+											    "name"          => "htaccess",
+											    "title"         => "TAG_MI_HTACCESS",
+											    "description"   => "TAG_MI_HTACCESS_DESC",
 											    "formtype"      => "yesno",
 											    "valuetype"     => "int",
-											    "default"       => in_array(php_sapi_name(), array("apache", "apache2handler")),
+											    "default"       => false,
+												"category"		=> "seo"
     										);
+
+$modversion["config"][] 				= array(
+												"name"          => "base",
+												"title"         => "TAG_MI_BASE",
+												"description"   => "TAG_MI_BASE_DESC",
+												"formtype"      => "text",
+												"valuetype"     => "text",
+												"default"       => "tags",
+												"category"		=> "seo"
+											);
+
+$modversion["config"][] 				= array(
+												"name"          => "html",
+												"title"         => "TAG_MI_HTML",
+												"description"   => "TAG_MI_HTML_DESC",
+												"formtype"      => "text",
+												"valuetype"     => "text",
+												"default"       => ".html",
+												"category"		=> "seo"
+											);
 
 $modversion["config"][] 				= array(
 											    "name"          => "items_perpage",
@@ -185,8 +244,20 @@ $modversion["config"][] 				= array(
 											    "description"   => "TAG_MI_ITEMSPERPAGE_DESC",
 											    "formtype"      => "textbox",
 											    "valuetype"     => "int",
-											    "default"       => 10
+											    "default"       => 10,
+												"category"		=> "mod"
     										);
+
+
+$modversion["config"][] 				= array(
+												"name"          => "limit_tag_cloud",
+												"title"         => "TAG_MI_ITEMSPERCLOUD",
+												"description"   => "TAG_MI_ITEMSPERCLOUD_DESC",
+												"formtype"      => "textbox",
+												"valuetype"     => "int",
+												"default"       => 100,
+												"category"		=> "mod"
+											);
 
 
 // Notification

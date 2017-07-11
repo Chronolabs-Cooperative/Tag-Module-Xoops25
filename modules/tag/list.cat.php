@@ -22,23 +22,14 @@
  * @link			http://internetfounder.wordpress.com
  */
 
+global $tagModule, $tagConfigsList, $tagConfigs, $tagConfigsOptions;
+global $modid, $term, $termid, $catid, $start, $sort, $order, $mode;
+
 include dirname(__FILE__) . "/header.php";
 
 if (!is_object($GLOBALS["xoopsModule"]) || "tag" != $GLOBALS["xoopsModule"]->getVar("dirname")) {
     xoops_loadLanguage("main", "tag");
 }
-
-if (tag_parse_args($args_num, $args, $args_str)) {
-    $args["modid"]    = !empty($args["modid"]) ? $args["modid"] : @$args_num[0];
-    $args["catid"]    = !empty($args["catid"]) ? $args["catid"] : @$args_num[1];
-    $args["start"]    = !empty($args["start"]) ? $args["start"] : @$args_num[2];
-}
-
-$modid = intval( empty($_GET["modid"]) ? @$args["modid"] : $_GET["modid"] );
-$catid = intval( empty($_GET["catid"]) ? @$args["catid"] : $_GET["catid"] );
-$start = intval( empty($_GET["start"]) ? @$args["start"] : $_GET["start"] );
-$sort    = "";
-$order    = "";
 
 if (empty($modid) && is_object($GLOBALS["xoopsModule"]) && "tag" != $GLOBALS["xoopsModule"]->getVar("dirname")) {
     $modid = $GLOBALS["xoopsModule"]->getVar("mid");
@@ -53,21 +44,23 @@ if (!empty($tag_desc)) {
 $xoopsOption["template_main"] = "tag_list.html";
 $xoopsOption["xoops_pagetitle"] = strip_tags($page_title);
 include XOOPS_ROOT_PATH . "/header.php";
+// Adds Stylesheet
+$GLOBALS['xoTheme']->addStylesheet(XOOPS_URL."/modules/tag/language/".$GLOBALS['xoopsConfig']['language'].'/style.css');
 
-$mode_display = empty($mode_display) ? @$_GET["mode"] : $mode_display;
-switch (strtolower($mode_display)) {
+$mode = empty($mode) ? @$_GET["mode"] : $mode;
+switch (strtolower($mode)) {
 case "list":
-    $mode_display = "list";
+    $mode = "list";
     $sort    = "count";
     $order    = "DESC";
     $limit = empty($tag_config["limit_tag_list"]) ? 10 : $tag_config["limit_tag"];
     break;
 case "cloud":
 default:
-    $mode_display = "cloud";
+    $mode = "cloud";
     $sort    = "count";
     $order    = "DESC";
-    $limit = empty($tag_config["limit_tag_could"]) ? 100 : $tag_config["limit_tag"];
+    $limit = empty($tag_config["limit_tag_cloud"]) ? 100 : $tag_config["limit_tag"];
     break;
 }
 
@@ -124,12 +117,12 @@ unset($tags, $tags_term);
 if ( !empty($start) || count($tags_data) >= $limit) {
     $count_tag = $tag_handler->getCount($criteria); // modid, catid
 
-    if (strtolower($mode_display) == "list") {
+    if (strtolower($mode) == "list") {
         include XOOPS_ROOT_PATH . "/class/pagenav.php";
-        $nav = new XoopsPageNav($count_tag, $limit, $start, "start", "catid={$catid}&amp;mode={$mode_display}");
+        $nav = new XoopsPageNav($count_tag, $limit, $start, "start", "catid={$catid}&amp;mode={$mode}");
         $pagenav = $nav->renderNav(4);
     } else {
-        $pagenav = "<a href=\"" . xoops_getEnv("PHP_SELF") . "?catid={$catid}&amp;mode={$mode_display}\">" . _MORE . "</a>";
+        $pagenav = "<a href=\"" . xoops_getEnv("PHP_SELF") . "?catid={$catid}&amp;mode={$mode}\">" . _MORE . "</a>";
     }
 } else {
     $pagenav = "";

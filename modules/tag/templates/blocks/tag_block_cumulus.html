@@ -1,0 +1,6 @@
+<div id="tags">
+<{foreach item=tag from=$block.tags}>
+		<a href="<{$xoops_url}>/modules/<{$block.tag_dirname}>/view.tag.php?id=<{$tag.id}>/" title="<{$tag.term}>"><{$tag.term}></a>
+<{/foreach}>
+</div>
+<div class="more-link"><a href="<{$xoops_url}>/modules/tag/"><{$smarty.const._MORE}></a></div>

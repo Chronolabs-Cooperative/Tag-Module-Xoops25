@@ -43,8 +43,6 @@ $customConfig = array();
  * TODO: there shall be an option for admin to choose a category to store subcategories and articles
  */
 $customConfig["tag_delimiter"] = array(",", " ", "|", ";");
-
-$customConfig["limit_tag"]  = 100;
 $customConfig["font_max"]   = 150;
 $customConfig["font_min"]   = 80;
 

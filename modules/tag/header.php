@@ -27,6 +27,49 @@ include_once '../../mainfile.php';
 include dirname(__FILE__) . "/include/vars.php";
 include_once dirname(__FILE__) . "/include/functions.php";
 
-$xoopsOption["xoops_module_header"] = '<link rel="stylesheet" type="text/css" href="' . XOOPS_URL . '/modules/tag/templates/style.css" />';
 $myts =& MyTextSanitizer::getInstance();
+
+global $tagModule, $tagConfigsList, $tagConfigs, $tagConfigsOptions;
+
+if (empty($tagModule))
+{
+	if (is_a($tagModule = xoops_getHandler('module')->getByDirname(basename(__DIR__)), "XoopsModule"))
+	{
+		if (empty($tagConfigsList))
+		{
+			$tagConfigsList = tag_load_config();
+		}
+		if (empty($tagConfigs))
+		{
+			$tagConfigs = xoops_getHandler('config')->getConfigs(new Criteria('conf_modid', $tagModule->getVar('mid')));
+		}
+		if (empty($tagConfigsOptions) && !empty($tagConfigs))
+		{
+			foreach($tagConfigs as $key => $config)
+				$tagConfigsOptions[$config->getVar('conf_name')] = $config->getConfOptions();
+		}
+	}
+}
+
+global $modid, $term, $termid, $catid, $start, $sort, $order, $mode;
+
+if (isset($_GET['dirname']) && !empty($_GET['dirname']))
+{
+	$GLOBALS['xoopsModule'] = xoops_getHandler('module')->getByDirname($_GET['dirname']);
+	$modid = $GLOBALS['xoopsModule']->getVar('mid');
+}
+
+$term   = empty($_GET["term"]) ? '' : $_GET["term"];
+$termid = intval( empty($_GET["id"]) ? 0 : $_GET["id"] );
+$catid  = intval( empty($_GET["catid"]) ? 0 : $_GET["catid"] );
+$start  = intval( empty($_GET["start"]) ? 0 : $_GET["start"] );
+$sort   = empty($_GET["sort"]) ? "time" : $_GET["sort"] ;
+$order  = empty($_GET["order"]) ? "DESC" : $_GET["order"] ;
+$mode   = empty($_GET["mode"]) ? "cloud" : (in_array($_GET["mode"], array('list','cloud'))? $_GET['mode'] : 'cloud') ;
+
+
+if (!is_object($GLOBALS["xoopsModule"]) || "tag" != $GLOBALS["xoopsModule"]->getVar("dirname", "n")) {
+	xoops_loadLanguage("main", "tag");
+}
+
 ?>

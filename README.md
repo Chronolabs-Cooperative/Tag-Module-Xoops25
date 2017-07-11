@@ -13,15 +13,15 @@ Check http://en.wikipedia.org/wiki/Tags for more info about "tag"
 The following goes in the .htaccess if your running apache2 in the XOOPS_ROOT_PATH
 
     RewriteEngine On
-    RewriteRule ^tags/index.html                  					./modules/tag/index.php                           			[L,NC,QSA]
-    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/([0-9]+).html     			./modules/tag/$1.$2.php?start=$3&termid=$4              		[L,NC,QSA]
-    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/([0-9]+)/([0-9]+).html     	./modules/tag/$1.$2.php?start=$3&catid=$4&termid=$5       		[L,NC,QSA]
-    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/([0-9]+)-(.*?).html     		./modules/tag/$1.$2.php?start=$3&termid=$4&dirname=$5           	[L,NC,QSA]
-    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/([0-9]+)/([0-9]+)-(.*?).html   	./modules/tag/$1.$2.php?start=$3&catid=$4&termid=$5&dirname=$6       	[L,NC,QSA]
-    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(.*?).html     			./modules/tag/$1.$2.php?start=$3&term=$4              			[L,NC,QSA]
-    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/([0-9]+)/(.*?).html     		./modules/tag/$1.$2.php?start=$3&catid=$4&term=$5       		[L,NC,QSA]
-    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(.*?)-(.*?).html     		./modules/tag/$1.$2.php?start=$3&term=$4&dirname=$5           		[L,NC,QSA]
-    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/([0-9]+)/(.*?)-(.*?).html     	./modules/tag/$1.$2.php?start=$3&catid=$4&term=$5&dirname=$6       	[L,NC,QSA]
+    RewriteRule ^tags/index.html                  										./modules/tag/index.php                           					[L,NC,QSA]
+    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+).html     		./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&termid=$7   					[L,NC,QSA]
+    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/([0-9]+).html     	./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$7&termid=$8       					[L,NC,QSA]
+    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)-(.*?).html     		./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&termid=$7&dirname=$8           			[L,NC,QSA]
+    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/([0-9]+)-(.*?).html  	./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$4&termid=$7&dirname=$8       		[L,NC,QSA]
+    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/(.*?).html     			./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&term=$7              					[L,NC,QSA]
+    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/(.*?).html     		./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$7&term=$8       					[L,NC,QSA]
+    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/(.*?)-(.*?).html     		./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&term=$7&dirname=$8           			[L,NC,QSA]
+    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/(.*?)-(.*?).html     	./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$7&term=$8&dirname=$9       			[L,NC,QSA]
 
 # Usage of the Tag Module in your XOOPS Module
 
@@ -47,8 +47,8 @@ This is how you would set up an inclusion of the tag module in an itemised edit 
 This is how you would set up an inclusion of the tag module in an itemised submition form in your module, this is not explicit example and could have variegates for the module you are writing or editing.
 
     // File: submit.item.php
-    $tag_handler = xoops_getmodulehandler('tag', 'tag');
-    $tag_handler->updateByItem($_POST["item_tag"], $itemid, $xoopsModule->getVar("dirname"), $catid = 0);
+    $handler = xoops_getmodulehandler('tag', 'tag');
+    $handler->updateByItem($_POST["item_tag"], $itemid, $xoopsModule->getVar("dirname"), $catid = 0);
 
 ## Step 3: define functions to build info of tagged items of module
 
@@ -57,7 +57,7 @@ Editing File Example: /modules/tag/plugin/mymodule.php
 
 ### Get item fields: title, content, time, link, uid, uname, tags
 
-    function mymodule_tag_iteminfo(&$items)
+    function mymodule_iteminfo(&$items)
     {
         $items_id = array();
         foreach (array_keys($items) as $cat_id) {
@@ -79,7 +79,7 @@ Editing File Example: /modules/tag/plugin/mymodule.php
                     "uid"       => $item_obj->getVar("uid"),
                     "link"      => "view.item.php?itemid={$item_id}",
                     "time"      => $item_obj->getVar("item_time"),
-                    "tags"      => tag_parse_tag($item_obj->getVar("item_tags", "n")), // optional
+                    "tags"      => parse_tag($item_obj->getVar("item_tags", "n")), // optional
                     "content"   => "",
                     );
             }
@@ -89,18 +89,27 @@ Editing File Example: /modules/tag/plugin/mymodule.php
 
 ### Remove orphan tag-item links
 
-    function mymodule_tag_synchronization($mid) 
+    function mymodule_synchronization($mid) 
     {
         // Optional
     }
 
-### Get's category catid data for module
+### Get's category catid data for module (new function in plugin since 2.30)
 
 ### Get item fields: catid, parentid, term
 
-    function mymodule_tag_category($catid) 
+    function mymodule_category($catid) 
     {
-        return array('catid'->0, 'parentid' =>0, 'term' =>0);
+        return array('catid'=>0, 'parentid' =>0, 'term' =>'Category Title');
+    }
+
+### Get's if tag's module is enabled in module (new function in plugin since 2.30)
+
+### Return Boolean
+
+    function mymodule_supported() 
+    {
+        return false;
     }
 
 ## Step 4: Display tags on our tiem page
@@ -114,7 +123,7 @@ These files are not explicit as filenames they could be different this is how to
 
 ### File: mymodule_item_template.html
 
-    <{include file="db:tag_bar.html"}>
+    <{include file="db:bar.html"}>
 
 ## Step 5: create tag list page and tag view page and for categories as well
 
@@ -157,10 +166,10 @@ This is where you create the blocks you will have to edit and create files for t
          "file"            => "mymodule_block_tag.php",
          "name"            => "Module Tag Cloud",
          "description"    => "Show tag cloud",
-         "show_func"        => "mymodule_tag_block_cloud_show",
-         "edit_func"        => "mymodule_tag_block_cloud_edit",
+         "show_func"        => "mymodule_block_cloud_show",
+         "edit_func"        => "mymodule_block_cloud_edit",
          "options"        => "100|0|150|80",
-         "template"        => "mymodule_tag_block_cloud.html",
+         "template"        => "mymodule_block_cloud.html",
          );
     
      /*
@@ -173,10 +182,10 @@ This is where you create the blocks you will have to edit and create files for t
          "file"            => "mymodule_block_tag.php",
          "name"            => "Module Top Tags",
          "description"    => "Show top tags",
-         "show_func"        => "mymodule_tag_block_top_show",
-         "edit_func"        => "mymodule_tag_block_top_edit",
+         "show_func"        => "mymodule_block_top_show",
+         "edit_func"        => "mymodule_block_top_edit",
          "options"        => "50|30|c",
-         "template"        => "mymodule_tag_block_top.html",
+         "template"        => "mymodule_block_top.html",
          );
     
      /*
@@ -186,66 +195,66 @@ This is where you create the blocks you will have to edit and create files for t
          "file"            => "mymodule_block_cumulus.php",
          "name"            => "Module Top Tags",
          "description"    => "Show top tags",
-         "show_func"        => "mymodule_tag_block_cumulus_show",
-         "edit_func"        => "mymodule_tag_block_cumulus_edit",
+         "show_func"        => "mymodule_block_cumulus_show",
+         "edit_func"        => "mymodule_block_cumulus_edit",
          "options"        => "",
-         "template"        => "mymodule_tag_block_cumulus.html",
+         "template"        => "mymodule_block_cumulus.html",
          );
 
 ### File: mymodule_block_tag.php
 
 This file belongs in /modules/mymodule/blocks and is adjustable in function names and filename in the xoops_version.php as seen in the example above.
 
-     function mymodule_tag_block_cloud_show($options) 
+     function mymodule_block_cloud_show($options) 
      {
          include_once XOOPS_ROOT_PATH . "/modules/tag/blocks/block.php";
-         return tag_block_cloud_show($options, basename(dirname(dirname(dirname(__DIR__)))));
+         return block_cloud_show($options, basename(dirname(dirname(dirname(__DIR__)))));
      }
-     function mymodule_tag_block_cloud_edit($options) 
+     function mymodule_block_cloud_edit($options) 
      {
          include_once XOOPS_ROOT_PATH . "/modules/tag/blocks/block.php";
-         return tag_block_cloud_edit($options);
+         return block_cloud_edit($options);
      }
-     function mymodule_tag_block_top_show($options) 
+     function mymodule_block_top_show($options) 
      {
          include_once XOOPS_ROOT_PATH . "/modules/tag/blocks/block.php";
-         return tag_block_top_show($options, basename(dirname(dirname(dirname(__DIR__)))));
+         return block_top_show($options, basename(dirname(dirname(dirname(__DIR__)))));
      }
-     function mymodule_tag_block_top_edit($options) 
+     function mymodule_block_top_edit($options) 
      {
          include_once XOOPS_ROOT_PATH . "/modules/tag/blocks/block.php";
-         return tag_block_top_edit($options);
+         return block_top_edit($options);
      }
 
 ### File: mymodule_block_cumulus.php
 
 This file belongs in /modules/mymodule/blocks and is adjustable in function names and filename in the xoops_version.php as seen in the example above.
 
-     function mymodule_tag_block_cumulus_show($options) 
+     function mymodule_block_cumulus_show($options) 
      {
          include_once XOOPS_ROOT_PATH . "/modules/tag/blocks/cumulus.php";
-         return tag_block_cumulus_show($options, basename(dirname(dirname(dirname(__DIR__)))));
+         return block_cumulus_show($options, basename(dirname(dirname(dirname(__DIR__)))));
      }
-     function mymodule_tag_block_cumulus_edit($options) 
+     function mymodule_block_cumulus_edit($options) 
      {
          include_once XOOPS_ROOT_PATH . "/modules/tag/blocks/cumulus.php";
-         return tag_block_cumulus_edit($options);
+         return block_cumulus_edit($options);
      }
 
-### File: mymodule_tag_block_cloud.html
+### File: mymodule_block_cloud.html
 
 This file belongs in /modules/mymodule/templates/blocks and is adjustable in function names and filename in the xoops_version.php as seen in the example above.
 
-     <{include file="db:tag_block_cloud.html"}>
+     <{include file="db:block_cloud.html"}>
 
-### File: mymodule_tag_block_top.html
-
-This file belongs in /modules/mymodule/templates/blocks and is adjustable in function names and filename in the xoops_version.php as seen in the example above.
-
-     <{include file="db:tag_block_top.html"}>
-
-### File: mymodule_tag_block_cumulus.html
+### File: mymodule_block_top.html
 
 This file belongs in /modules/mymodule/templates/blocks and is adjustable in function names and filename in the xoops_version.php as seen in the example above.
 
-     <{include file="db:tag_block_cumulus.html"}>
+     <{include file="db:block_top.html"}>
+
+### File: mymodule_block_cumulus.html
+
+This file belongs in /modules/mymodule/templates/blocks and is adjustable in function names and filename in the xoops_version.php as seen in the example above.
+
+     <{include file="db:block_cumulus.html"}>

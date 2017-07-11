@@ -22,29 +22,32 @@
  * @link			http://internetfounder.wordpress.com
  */
 
+ 
 if (!defined("XOOPS_ROOT_PATH")) {
     exit();
 }
 
-class TagLink extends XoopsObject
+class TagCategories_link extends XoopsObject
 {
     /**
      * Constructor
+     *
+     * @param int $id ID of the tag, deprecated
      */
-	function __construct()
-    {
-        $this->initVar("tl_id",         XOBJ_DTYPE_INT,     null, false);
-        $this->initVar("tag_id",        XOBJ_DTYPE_INT,     0);
-        $this->initVar("tag_modid",     XOBJ_DTYPE_INT,     0);
-        $this->initVar("tag_catid",     XOBJ_DTYPE_INT,     0);
-        $this->initVar("tag_itemid",    XOBJ_DTYPE_INT,     0);
-        $this->initVar("tag_time",      XOBJ_DTYPE_INT,     0);
+	function __construct($id = null)
+	{
+		$this->initVar("cl_id",            XOBJ_DTYPE_INT,     null, false);
+		$this->initVar("tag_catid",        XOBJ_DTYPE_INT,     null, false);
+		$this->initVar("tag_modcatid",     XOBJ_DTYPE_INT,     null, false);
+		$this->initVar("tag_parent_mcid",  XOBJ_DTYPE_INT,     null, false);
+        $this->initVar("tag_modid",        XOBJ_DTYPE_INT,     null, false);
+        $this->initVar("tag_time",         XOBJ_DTYPE_INT,     null, false);
+        $this->initVar("tag_count",        XOBJ_DTYPE_INT,     0);
     }
 }
 
 /**
- * Tag link handler class.  
- * @package tag
+ * Tag object handler class.  
  *
  * @author      Taiwen Jiang <phppp@users.sourceforge.net>
  * @copyright   copyright &copy; The XOOPS Project
@@ -53,9 +56,9 @@ class TagLink extends XoopsObject
  *
  */
 
-class TagLinkHandler extends XoopsPersistableObjectHandler
+class TagCategories_linkHandler extends XoopsPersistableObjectHandler
 {
-    var $table_stats;
+
     
     /**
      * Constructor
@@ -64,18 +67,8 @@ class TagLinkHandler extends XoopsPersistableObjectHandler
      **/
     function __construct(&$db)
     {
-    	$this->__construct($db, "tag_link", "TagLink", "tl_id", "tag_itemid");
-        $this->table_stats = $this->db->prefix("tag_stats");
+    	$this->__construct($db, "tag_categories_link", "TagCategories_link", "tag_catid", "tag_term");
     }
-    
-    /**
-     * clean orphan links from database
-     * 
-     * @return     bool    true on success
-     */
-    function cleanOrphan()
-    {
-        return parent::cleanOrphan($this->db->prefix("tag_tag"), "tag_id");
-    }
+  
 }
 ?>

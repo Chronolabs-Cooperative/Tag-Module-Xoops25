@@ -22,23 +22,42 @@
  * @link			http://internetfounder.wordpress.com
  */
 
+
+global $tagModule, $tagConfigsList, $tagConfigs, $tagConfigsOptions;
+global $modid, $term, $termid, $catid, $start, $sort, $order, $mode;
+
 include dirname(__FILE__) . "/header.php";
 
-$limit = empty($tag_config["limit_tag_could"]) ? 100 : $tag_config["limit_tag_could"];
+$limit = empty($tagConfigsList["limit_tag_cloud"]) ? 100 : $tagConfigsList["limit_tag_cloud"];
+
+
+if ($tagConfigsList['htaccess'])
+{
+	if (is_object($GLOBALS["xoopsModule"]) || "tag" != $GLOBALS["xoopsModule"]->getVar("dirname", "n")) {
+		$url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/index" . $GLOBALS["xoopsModule"]->getVar("dirname", "n") . $tagConfigsList['html'];
+	} else {
+		$url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/index" . $tagConfigsList['html'];
+	}
+	if (!strpos($url, $_SERVER["REQUEST_URI"]))
+	{
+		redirect_header($url, 0, "");
+		exit(0);
+	}
+}
+
 
 $page_title = sprintf(TAG_MD_TAGLIST, $xoopsConfig["sitename"]);
 $xoopsOption["template_main"] = "tag_index.html";
-$xoopsOption["xoops_pagetitle"] = strip_tags($page_title);
 include XOOPS_ROOT_PATH . "/header.php";
+// Adds Stylesheet
+$GLOBALS['xoTheme']->addStylesheet(XOOPS_URL."/modules/tag/language/".$GLOBALS['xoopsConfig']['language'].'/style.css');
 
 $tag_handler =& xoops_getmodulehandler("tag", "tag");
-$tag_config = tag_load_config();
-tag_define_url_delimiter();
 
 $criteria = new CriteriaCompo();
-$criteria->setSort("count");
+$criteria->setSort("tag_count");
 $criteria->setOrder("DESC");
-$criteria->setLimit(empty($tag_config["limit_tag_could"]) ? 100 : $tag_config["limit_tag"]);
+$criteria->setLimit(empty($tagConfigsList["limit_tag_cloud"]) ? 100 : $tagConfigsList["limit_tag"]);
 $tags = $tag_handler->getByLimit($criteria);
 
 $count_max = 0;
@@ -53,8 +72,8 @@ array_multisort($tags_term, SORT_ASC, $tags);
 $count_interval = $count_max - $count_min;
 $level_limit = 5;
 
-$font_max = $tag_config["font_max"];
-$font_min = $tag_config["font_min"];
+$font_max = $tagConfigsList["font_max"];
+$font_min = $tagConfigsList["font_min"];
 $font_ratio = ($count_interval) ? ($font_max - $font_min) / $count_interval : 1;
 
 $tags_data = array();
@@ -70,14 +89,11 @@ foreach (array_keys($tags) as $key) {
 unset($tags, $tags_term);
 $pagenav = "<a href=\"" . XOOPS_URL . "/modules/tag/list.tag.php\">" . _MORE . "</a>";
 
-$xoopsTpl -> assign("lang_jumpto",      TAG_MD_JUMPTO);
-$xoopsTpl -> assign("pagenav",          $pagenav);
-$xoopsTpl -> assign("tag_page_title",   $page_title);
-$xoopsTpl -> assign_by_ref("tags",      $tags_data);
-
-// Loading module meta data, NOT THE RIGHT WAY DOING IT
-$xoopsTpl -> assign("xoops_pagetitle", $xoopsOption["xoops_pagetitle"]);
-$xoopsTpl -> assign("xoops_module_header", $xoopsOption["xoops_module_header"]);
+$GLOBALS['xoopsTpl']->assign("lang_jumpto",      TAG_MD_JUMPTO);
+$GLOBALS['xoopsTpl']->assign("pagenav",          $pagenav);
+$GLOBALS['xoopsTpl']->assign("tag_page_title",   $page_title);
+$GLOBALS['xoopsTpl']->assign_by_ref("tags",      $tags_data);
+$GLOBALS['xoopsTpl']->assign("xoops_pagetitle", $page_title);
 
 include_once "footer.php";
 ?>

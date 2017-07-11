@@ -28,4 +28,7 @@ define("TAG_AM_ALL","All modules");
 define("TAG_AM_NUM","Number for each time");
 define("TAG_AM_IN_PROCESS","Data synchronization is in process, please wait for a while ...");
 define("TAG_AM_FINISHED","Data synchronization is finished.");
+
+// Tag version 3.01
+
 ?>
