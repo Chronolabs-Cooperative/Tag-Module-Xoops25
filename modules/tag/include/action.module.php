@@ -25,12 +25,12 @@
 if (!defined('XOOPS_ROOT_PATH')) { exit(); }
 defined("TAG_INI") || include dirname(__FILE__) . "/vars.php";
 
-function xoops_module_install_tag(&$module)
+function xoops_module_install_tag($module)
 {
     return true;
 }
 
-function xoops_module_pre_install_tag(&$module)
+function xoops_module_pre_install_tag($module)
 {
     if (substr(XOOPS_VERSION, 0, 9) < "XOOPS 2.3") {
         $module->setErrors( "The module only works for XOOPS 2.3+" );
@@ -51,17 +51,17 @@ function xoops_module_pre_install_tag(&$module)
     return true;
 }
 
-function xoops_module_pre_update_tag(&$module)
+function xoops_module_pre_update_tag($module)
 {
     return true;
 }
 
-function xoops_module_pre_uninstall_tag(&$module)
+function xoops_module_pre_uninstall_tag($module)
 {
     return true;
 }
 
-function xoops_module_update_tag(&$module, $prev_version = null)
+function xoops_module_update_tag($module, $prev_version = null)
 {
     //load_functions("config");
     //mod_clearConfg($module->getVar("dirname", "n"));

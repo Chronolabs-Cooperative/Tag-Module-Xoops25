@@ -1,0 +1,132 @@
+
+--[ Release Information ]------------------------------------------------------------
+
+hhhhhhhhhhhhhhhhhhhhhhhh-                                  -hhhhhhhhhhhhhhhhhhhhhhhh
+hh snails.email hhhhhhhh-                                  -hhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhys.           `..------..`           .syhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhy+-`     `.:/ooyhhhhhhhhhhhhhhyoo/:.`     `-+yhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhh:    `-+shhhhhhhhhhhhhhhhhhhhhhhhhhhhs+-`    :hhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhs:/shhhhy+yhhhhhhyyyyyyyyyyhhhhhhy+yhhhhs/:shhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhs `/+/..`         ``.-/+/` shhhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhhhhyo:    `.:+osyyyyyyso+:.`    :oyhhhhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhhhhhhhhhhhhhhhhhy+-  `-+ydmmmmmmmmmmmmmmmmmmdy+-`  -+yhhhhhhhhhhhhhhhhhhhhhhh
+hhhhhhhy/shhhhhhhhhhhs:` `:sdmmmmmmmmmmmmmmmmmmmmmmmmmmds:` `:shhhhhhhhhhhs/yhhhhhhh
+hhhhhhs.  -yhhhhhhhs-  .odmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmdo.  -shhhhhhhy-  .shhhhhh
+hhhhhs`   -hhhhhhh:  .smmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmms.  :hhhhhhh-   `shhhhh
+````.    :hhhhhhs` `ommmmmmmmmmdhyhmmmmmdhyhmmmmmhyhdmmmmmmmmmmo` `shhhhhh:    .````
+        :hddddh+  .hmmmmmmmmmo.``.``-s+. `. `/y/` .` .+dmmmmmmmmh.  +hhhhdh:        
+       -hdh+//:  -dmmmmmmmmh. :ymmds`  /hmmd+`  odmmh/ `ymmmmmmmmd-  ://+hdh-       
+      `ydddh+`  -dmmmmmmmmd. +mmmmmy`  /mmmms   ommmmms``hmmmmmmmmd-  `+hdddy`      
+      /dddddh` `hmmmmmmmmm+ .mmmmmm/ -  hmmd` - .dmmmmm: -mmmmmmmmmh` `hddddd/      
+     `yddddd/  +mmmmmmmmmm- /mmmmmd. o` smmh `y` ymmmmms .mmmmmmmmmm+  /dddddy`     
+     -dddddh. `dmmmmmmmmmm: :mmmmmm- +` smmh `o` hmmmmmo .mmmmmmmmmmd` .hddddh-     
+     +dddddy  :mmmmmmmmmmms .mmmmmm/ `  hmmd. ` -mmmmmm- :mmmmmmmmmmm:  yddddd+     
+     oddddds  /mmmmmmmmmmmd. +mmmmmy`  +mmmms   ommmmmy``hmmmmmmmmmmm/  sdddddo     
+     oddddds  /mmmmmmmmmmmmy` ommmmm- `ymmmmd` `hmmmmh. +mmmmmmmmmmmm/  sdddddo     
+     +dddddy  :mmmmmdo:ymmmmy` /dmh- . `omms. . .smdo` +mmmd//hmmmmmm:  yddddd+     
+     -dddddh. `hmmdo` -ydddddh: `-  +dy. `. `odo` .` -yddddh/  /hmmmd` .hddddd-     
+     `yddddd/  +md:            ``-.`   ``--``   ``-.`           `dmm+  /dddddy`     
+      /dddddh` `hmd+` -yhhhhhhdmmmmmdhddmmmmmdhdmmmmmdhhhhhh/  /hmmh` `hddddd/      
+      `ydddh+`  .dmmdo/smmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmh//hmmmd.  `+hdddy`      
+       -ddh+//:  -hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmh-  ://+hdd-       
+        :ddddddo  .ymmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmy.  odddddd:        
+.....    /ddddddy` `+dmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmd+  `ydddddd/    .....
+dddddy`   :hdddddd/  .odmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmdo.  /ddddddh:   `yddddd
+ddddddy.  :hdddddddy:  .+hmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmh+.  :ydddddddh:  .ydddddd
+dddddddh+ydddddddddddy/`  -ohdddmmmmmmmmmmmmmmmmmmdmdddho-  `/ydddddddddddy+hddddddd
+mdddddmmmmmmmmmmmmmmmmddo-   ./oyddddddddddddddddddyo/.   -odmmmmmmmmmmmmmddmddmmmmd
+mmmmmmmmmmmmmmmmmmmmmmmmmmds:    ``-//+osssso+//-``    :sdmmmmmmmmmmmmmmmmmmmmmmmmmm
+mmmmmmmmmmmmmmmmmmmmmmmmmmmmh `+o/-.``        ``.-/o+` hmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+mmmmmmmmmmmmmmmmmmmmy/+ydmmmdodmmmmmdddhhhhhhdddmmmmmdodmmmdy+/ymmmmmmmmmmmmmmmmmmmm
+mmmmmmmmmmmmmmmmmmd:    `:oydmmmmmmmmmmmmmmmmmmmmmmmmmmdyo:`    :dmmmmmmmmmmmmmmmmmm
+mmmmmmmmmmmmmmmmmmmds:`     `.:+syhdmmmmmmmmmmmmdhys+:.`     `:sdmmmmmmmmmmmmm au mm
+mmmmmmmmmmmmmmmmmmmmmmdh.           `.-::::::-.`           .hdmmmmmmmmmmmmmm 2017 mm
+mmmmmmmmmmmmmmmmmmmmmmmm:                                  :mmmmmmmmmmm wishcraft mm
+mmmmmmmmmmmmmmmmmmmmmmmm:                                  :mmmmmmmmmmmmmmmmmmmmmmmm
+
+Chronolabs Cooperative Presents a Release for XOOPS 2.5; this is an module for addin
+Tag, Nodes, Keywords based in categories and tags, and is based on phppp Tag 2.30...
+
+--[ Release Versioning ]------------------------------------------------------------
+
+Licence: GPL3 + ACADEMIC
+Frameworks: XOOPS 2.5.8, php7.0, mysql 5.x, ubuntu/debian
+Type: XOOPS Module
+Title: Tags
+Description: Tagging content in nodes and keywords in the XOOPS System with Cat`s!
+Version: 3.01
+Upgradable:
+Status: Release
+Commissioned: 1970-02-02 00:22:22 +1000
+Public: 1970-02-02 00:22:22 +1000
+
+--[ Release Author Data ]------------------------------------------------------------
+
+Name: Simon Antony Roberts
+eMail: simon@snails.email
+Skype: antony.cipher
+Time-zone: Australia/Sydney
+Location: Marrickville South, NSW, Australia
+Aliases: wishcraft, mynamesnot
+Blog: http://internetfounder.wordpress.com
+Twitter: https://twitter.com/SimonASaies
+Facebook: https://facebook.com/mynamesnot
+Google+: https://plus.google.com/u/0/105256588269767640343
+Group Profile: http://snails.email/naut/au/syd/1
+XOOPS Profile: http://xoops.org/modules/profile/userinfo.php?uid=62352
+Sourceforge Profile: https://sourceforge.net/users/wishcraft/profile
+GitHub Profile: http://github.com/Cipherhouse
+
+--[ Release Group Data ]----------------------------------------------------------
+
+Icon: https://labs.partnerconsole.net/execute2/external/reseller-logo
+Avatar: https://labs.partnerconsole.net/execute2/external/reseller-logo
+Name: Chronolabs Cooperative
+eMail: chronolabs@snails.email
+Time-zone: Australia/Sydney
+Location: Marrickville South, NSW, Australia
+Registration: http://www.abr.business.gov.au/SearchByAbn.aspx?abn=41460248629
+Blog: http://internetfounder.wordpress.com
+Twitter: https://twitter.com/ChronolabsCoop
+Facebook: https://facebook.com/ChronolabsCoop
+Google+: 
+Profile: http://au.syd.snails.email
+Sourceforge Profile: https://sourceforge.net/projects/chronolabs
+GitHub Profile: http://github.com/Chronolabs-Cooperative
+
+--[ Translation Author ]------------------------------------------------------------
+
+Language: English
+CharSet: UTF8
+LangCode: EN
+Name: Simon Antony Roberts
+eMail: simon@snails.email
+Skype: antony.cipher
+Time-zone: Australia/Sydney
+Location: Marrickville South, NSW, Australia
+Aliases: wishcraft, mynamesnot
+Blog: http://internetfounder.wordpress.com
+Twitter: https://twitter.com/SimonASaies
+Facebook: https://facebook.com/mynamesnot
+Google+: https://plus.google.com/u/0/105256588269767640343
+Group Profile: http://snails.email/naut/au/syd/1
+XOOPS Profile: http://xoops.org/modules/profile/userinfo.php?uid=62352
+Sourceforge Profile: https://sourceforge.net/users/wishcraft/profile
+GitHub Profile: http://github.com/Cipherhouse
+
+--[ Release Resources ]------------------------------------------------------------
+
+File ZIP:
+File RAR:
+File 7Z:
+File TAR.GZ:
+Git Pull:
+
+--[ Project Data ]----------------------------------------------------------------
+
+Repository XOOPS: https://svn.code.sf.net/p/xoops/svn/XoopsModules/tag
+Repository SVN:
+Repository GIT: 
+Icon: 
+Avatar: 
+Banner:

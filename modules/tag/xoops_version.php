@@ -82,23 +82,23 @@ $modversion["tables"] 					= array(
 											);
 
 // Main
-$modversion['hasMain'] 					= TAG_MI_MODULE_HASMAIN;
+$modversion['hasMain'] 					= TAG_MI_HASMAIN;
 
 // Admin
-$modversion['hasAdmin'] 				= TAG_MI_MODULE_HASADMIN;
+$modversion['hasAdmin'] 				= TAG_MI_HASADMIN;
 $modversion['adminindex']  				= "admin/index.php";
 $modversion['adminmenu']   				= "admin/menu.php";
 $modversion['system_menu'] 				= 1;
 
 // Search
-$modversion["hasSearch"] 				= TAG_MI_MODULE_HASSEARCH;
+$modversion["hasSearch"] 				= TAG_MI_HASSEARCH;
 $modversion['search']['file'] 			= "include/search.inc.php";
 $modversion['search']['func'] 			= "tag_search";
 
 // Comments
-$modversion["hasComments"] 				= TAG_MI_MODULE_HASCOMMENTS;
+$modversion["hasComments"] 				= TAG_MI_HASCOMMENTS;
 
-$modversion["onInstall"] 				= "include/action.module.php";
+//$modversion["onInstall"] 				= "include/action.module.php";
 $modversion["onUpdate"] 				= "include/action.module.php";
 $modversion["onUninstall"] 				= "include/action.module.php";
 
@@ -202,7 +202,7 @@ $modversion['configcat']['seo']['name']        = TAG_MI_CONFCAT_SEO;
 $modversion['configcat']['seo']['description'] = TAG_MI_CONFCAT_SEO_DESC;
 
 $modversion['configcat']['mod']['name']        = TAG_MI_CONFCAT_MODULE;
-$modversion['configcat']['mod']['description'] = TAG_MI_CONFCAT_MODULE_DESC;
+$modversion['configcat']['mod']['description'] = TAG_MI_CONFCAT_DESC;
 
 
 // Configs
