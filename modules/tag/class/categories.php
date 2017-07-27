@@ -89,7 +89,7 @@ class TagCategoriesHandler extends XoopsPersistableObjectHandler
      **/
     function __construct(&$db)
     {
-    	$this->__construct($db, "tag_categories", "TagCategories", "tag_catid", "tag_term");
+    	parent::__construct($db, "tag_categories", "TagCategories", "tag_catid", "tag_term");
     }
     
     

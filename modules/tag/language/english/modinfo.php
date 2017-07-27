@@ -14,8 +14,8 @@ if (!defined('XOOPS_ROOT_PATH')) { exit(); }
 
 // Module definition headers for xoops_version.php
 define('TAG_MI_NAME','Tags');
-define('TAG_MI_VERSION','3.01');
-define('TAG_MI_RELEASEDATE','11-07-2017');
+define('TAG_MI_VERSION','3.02');
+define('TAG_MI_RELEASEDATE','28-07-2017');
 define('TAG_MI_STATUS','release');
 define('TAG_MI_DESCRIPTION','Tags for XOOPS');
 define('TAG_MI_CREDITS','Mynamesnot, Wishcraft');

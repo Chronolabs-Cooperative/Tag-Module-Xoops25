@@ -33,7 +33,7 @@ echo $indexAdmin->addNavigation(basename(__FILE__));
 echo $indexAdmin->renderIndex();
 
 $op = intval( empty($_REQUEST['op']) ? 'default' : $_REQUEST['modid'] );
-$filename = intval( empty($_REQUEST['filename']) ? '' : $_REQUEST['filename'] );
+$filename = intval( empty($_REQUEST['filename']) ? '' : basename($_REQUEST['filename']) );
 
 if (!empty($filename) && !file_exists(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'plugin' . DIRECTORY_SEPARATOR . $filename))
 {

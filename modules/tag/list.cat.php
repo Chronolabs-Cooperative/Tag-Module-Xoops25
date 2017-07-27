@@ -58,7 +58,7 @@ $limit  = empty($tagConfigsList["items_perpage"]) ? 10 : $tagConfigsList["items_
 $categories = $categories_handler->getObjects($criteria);
 foreach($categories as $category)
 {
-	$result[$category->getVar('tag_catid')]['uri'] = $category->getURL();
+	$result[$category->getVar('tag_catid')]['url'] = $category->getURL();
 	$result[$category->getVar('tag_catid')]['title'] = $category->getVar('tag_term');
 	$result[$category->getVar('tag_catid')]['count'] = $category->getVar('tag_count');
 	switch ($order)
@@ -115,7 +115,7 @@ foreach($categories as $category)
 	$children = $categories_handler->getObjects($criteria);
 	foreach($children as $child)
 	{
-		$result[$category->getVar('tag_catid')]['children'][$child->getVar('tag_catid')]['uri'] = $child->getURL();
+		$result[$category->getVar('tag_catid')]['children'][$child->getVar('tag_catid')]['url'] = $child->getURL();
 		$result[$category->getVar('tag_catid')]['children'][$child->getVar('tag_catid')]['title'] = $child->getVar('tag_term');
 		$result[$category->getVar('tag_catid')]['children'][$child->getVar('tag_catid')]['count'] = $child->getVar('tag_count');
 		switch ($order)
@@ -125,38 +125,39 @@ foreach($categories as $category)
 				$criteriab = new CriteriaCompo(new Criteria('tag_catid', $child->getVar('tag_catid')));
 				if (basename(__DIR__) != $GLOBALS["xoopsModule"]->getVar("dirname", "n"))
 					$criteriab->add(new Criteria('tag_modid', $GLOBALS["xoopsModule"]->getVar('mid')));
-					$criteriab->setSort('tag_time');
-					$criteriab->setOrder('ASC');
-					$criteriab->setStart(0);
-					$criteriab->setLimit($limit/2);
-					$links = $tag_link_handler->getObjects($criteriab);
-					$tagids = array();
-					foreach($links as $link)
-					{
-						$tagids[$link->getVar('tag_id')] = $link->getVar('tag_id');
-					}
-					break;
+				$criteriab->setSort('tag_time');
+				$criteriab->setOrder('ASC');
+				$criteriab->setStart(0);
+				$criteriab->setLimit($limit/2);
+				$links = $tag_link_handler->getObjects($criteriab);
+				$tagids = array();
+				foreach($links as $link)
+				{
+					$tagids[$link->getVar('tag_id')] = $link->getVar('tag_id');
+				}
+				break;
 			case "count":
 				$criteriab = new CriteriaCompo(new Criteria('tag_catid', $child->getVar('tag_catid')));
 				if (basename(__DIR__) != $GLOBALS["xoopsModule"]->getVar("dirname", "n"))
 					$criteriab->add(new Criteria('tag_modid', $GLOBALS["xoopsModule"]->getVar('mid')));
-					$links = $tag_link_handler->getObjects($criteriab);
-					$tmpids = array();
-					foreach($links as $link)
-					{
-						$tmpids[$link->getVar('tag_id')] = $link->getVar('tag_id');
-					}
-					$criteriac = new CriteriaCompo(new Criteria('tag_id', '(' . implode(", ", $tmpids). ")", "IN"));
-					$criteriac->setSort('tag_count');
-					$criteriac->setOrder('DESC');
-					$criteriac->setStart(0);
-					$criteriac->setLimit($limit/2);
-					$tags = $tag_handler->getObjects($criteriac);
-					$tagids = array();
-					foreach($tags as $tag)
-					{
-						$tagids[$tag->getVar('tag_id')] = $tag->getVar('tag_id');
-					}
+				$links = $tag_link_handler->getObjects($criteriab);
+				$tmpids = array();
+				foreach($links as $link)
+				{
+					$tmpids[$link->getVar('tag_id')] = $link->getVar('tag_id');
+				}
+				$criteriac = new CriteriaCompo(new Criteria('tag_id', '(' . implode(", ", $tmpids). ")", "IN"));
+				$criteriac->setSort('tag_count');
+				$criteriac->setOrder('DESC');
+				$criteriac->setStart(0);
+				$criteriac->setLimit($limit/2);
+				$tags = $tag_handler->getObjects($criteriac);
+				$tagids = array();
+				foreach($tags as $tag)
+				{
+					$tagids[$tag->getVar('tag_id')] = $tag->getVar('tag_id');
+				}
+				break;
 		}
 		if (!empty($tagids))
 		{

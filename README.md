@@ -68,23 +68,27 @@ Editing File Example: /modules/tag/plugin/mymodule.php
                 $items_id[] = intval($item_id);
             }
         }
-        $item_handler =& xoops_getmodulehandler("item", "module");
-        $items_obj = $item_handler->getObjects(new Criteria("itemid", "(" . implode(", ", $items_id) . ")", "IN"), true);
-        
+        $item_handler =& xoops_getmodulehandler('item', 'mymodule');
+        $items_obj = $item_handler->getObjects(new Criteria("id", "(" . implode(", ", $items_id) . ")", "IN"), true);
+        $myts =& MyTextSanitizer::getInstance();
         foreach (array_keys($items) as $cat_id) {
             foreach (array_keys($items[$cat_id]) as $item_id) {
                 $item_obj =& $items_obj[$item_id];
-                $items[$cat_id][$item_id] = array(
-                    "title"     => $item_obj->getVar("item_title"),
-                    "uid"       => $item_obj->getVar("uid"),
-                    "link"      => "view.item.php?itemid={$item_id}",
-                    "time"      => $item_obj->getVar("item_time"),
-                    "tags"      => parse_tag($item_obj->getVar("item_tags", "n")), // optional
-                    "content"   => "",
-                    );
+                if (is_object($item_obj))
+                    $items[$cat_id][$item_id] = array(
+                        "title"     => $item_obj->getVar("subject"),
+                        "uid"       => $item_obj->getVar("uid"),
+                        "link"      => "index.php?id={$item_id}",
+                        "url"       => XOOPS_URL . "/modules/mymodule/index.php?id={$item_id}",
+                        "time"      => formatTimestamp($item_obj->getVar("date"), "s"),
+                        "tags"      => tag_parse_tag($item_obj->getVar("tags", "n")),
+                        "category"  => tag_parse_category($cat_id),
+                        "content"   => $myts->displayTarea($item_obj->getVar("page_description"),true,true,true,true,true,true)
+                        );
             }
         }
         unset($items_obj);    
+        return $items;
     }
 
 ### Remove orphan tag-item links
@@ -110,6 +114,15 @@ Editing File Example: /modules/tag/plugin/mymodule.php
     function mymodule_supported() 
     {
         return false;
+    }
+
+### Get's if tag's module (parent) version supported and module version (child) supported (new function in plugin since 2.30)
+
+### Return Array
+
+    function mymodule_version() 
+    {
+        return array('parent' => 3.02, 'child' => 1.69);
     }
 
 ## Step 4: Display tags on our tiem page
@@ -232,12 +245,12 @@ This file belongs in /modules/mymodule/blocks and is adjustable in function name
 
      function mymodule_block_cumulus_show($options) 
      {
-         include_once XOOPS_ROOT_PATH . "/modules/tag/blocks/cumulus.php";
+         include_once XOOPS_ROOT_PATH . "/modules/tag/blocks/block.php";
          return block_cumulus_show($options, basename(dirname(dirname(dirname(__DIR__)))));
      }
      function mymodule_block_cumulus_edit($options) 
      {
-         include_once XOOPS_ROOT_PATH . "/modules/tag/blocks/cumulus.php";
+         include_once XOOPS_ROOT_PATH . "/modules/tag/blocks/block.php";
          return block_cumulus_edit($options);
      }
 

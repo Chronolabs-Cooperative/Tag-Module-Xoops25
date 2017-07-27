@@ -90,7 +90,7 @@ class TagTagHandler extends XoopsPersistableObjectHandler
      **/
     function __construct(&$db)
     {
-    	self::__construct($db, "tag_tag", "TagTag", "tag_id", "tag_term");
+    	parent::__construct($db, "tag_tag", "TagTag", "tag_id", "tag_term");
         $this->table_link = $GLOBALS['xoopsDB']->prefix("tag_link");
         $this->table_stats = $GLOBALS['xoopsDB']->prefix("tag_stats");
         $this->table_categories_link = $GLOBALS['xoopsDB']->prefix("tag_categories_link");
