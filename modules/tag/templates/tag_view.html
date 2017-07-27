@@ -2,20 +2,27 @@
 	<h3>
 		<a href="<{$xoops_url}>/modules/<{$xoops_dirname}>/" title="<{$module_name}>"><{$module_name}></a> &raquo; 
 		<a href="<{$xoops_url}>/modules/<{$xoops_dirname}>/list.tag.php" title="<{$smarty.const.TAG_MD_TAGS}>"><{$smarty.const.TAG_MD_TAGS}></a> &raquo; 
-		<a href="<{$xoops_url}>/modules/<{$xoops_dirname}>/view.tag.php<{$smarty.const.URL_DELIMITER}><{$tag_id}>" title="<{$tag_term}>"><{$tag_term}></a>
+		<a href="<{$xoops_url}>/modules/<{$xoops_dirname}>/view.tag.php?termid=<{$tag_id}>" title="<{$tag_term}>"><{$tag_term}></a>
 	</h3>
 </div>
 
+<div id="pagenav" style="padding-top: 10px; text-align: right;">
+	<{$pagenav}>
+</div>
 
 <div class="tag-item-list" style="padding-top: 10px;">
-<{foreach item=article from=$tag_articles}>
-
+<{foreach item=article from=$tag_data}>
+	<div class="tag-item-categories" style="padding-top: 10px;">
+		<a href="<{$xoops_url}>/modules/<{$article.dirname}>/" title="<{$article.module}>"><{$article.module}></a>
+		<{foreach item=cat from=$article.category}>
+		&nbsp;>>&nbsp;<a href="<{$cat.url}>"><{$cat.term}> <font style="font-size: 0.6667em;">(<{$cat.count}>)</font></a>
+		<{/foreach}>
+	</div>
 	<div class="tag-item-title" style="padding-top: 10px;">
-		<a href="<{$xoops_url}>/modules/<{$article.dirname}>/" title="<{$article.module}>"><{$article.module}></a>:
-		<a href="<{$xoops_url}>/modules/<{$article.dirname}>/<{$article.link}>" title="<{$article.title}>"><{$article.title}></a>
+		<a href="<{$article.url}>" title="<{$article.title}>"><{$article.title}></a>
 	</div>
 	<div class="tag-item-meta" style="padding-left: 10px;">
-		<a href="<{$xoops_url}>/userinfo.php?uid=<{$article.uid}>" title="<{$article.uname}>"><{$article.uname}></a> <{$article.time}><br />
+		<a href="<{$article.userurl}>" title="<{$article.uname}>"><{$article.uname}></a> <{$article.time}><br />
 		<{assign var=tagbar value=$article.tags}>
 		<{include file="db:tag_bar.html"}>
 	</div>
@@ -33,6 +40,6 @@
 </div>
 <{/if}>
 
-<div id="pagenav" style="padding-top: 10px;">
-<{$pagenav}>
+<div id="pagenav" style="padding-top: 10px; text-align: left;">
+	<{$pagenav}>
 </div>

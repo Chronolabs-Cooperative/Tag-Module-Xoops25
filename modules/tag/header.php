@@ -24,7 +24,6 @@
 
 
 include_once '../../mainfile.php';
-include dirname(__FILE__) . "/include/vars.php";
 include_once dirname(__FILE__) . "/include/functions.php";
 
 $myts =& MyTextSanitizer::getInstance();
@@ -51,24 +50,24 @@ if (empty($tagModule))
 	}
 }
 
-global $modid, $term, $termid, $catid, $start, $sort, $order, $mode;
+global $modid, $term, $termid, $catid, $start, $sort, $order, $mode, $dirname;
 
-if (isset($_GET['dirname']) && !empty($_GET['dirname']))
+$dirname	= empty($_GET["dirname"]) ? basename(__DIR__) : $_GET["dirname"];
+$term   	= empty($_GET["term"]) ? '' : $_GET["term"];
+$termid	 	= intval( empty($_GET["id"]) ? 0 : $_GET["id"] );
+$catid  	= intval( empty($_GET["catid"]) ? 0 : $_GET["catid"] );
+$start  	= intval( empty($_GET["start"]) ? 0 : $_GET["start"] );
+$sort   	= empty($_GET["sort"]) ? "time" : $_GET["sort"] ;
+$order  	= empty($_GET["order"]) ? "DESC" : $_GET["order"] ;
+$mode   	= empty($_GET["mode"]) ? "cloud" : (in_array($_GET["mode"], array('list','cloud'))? $_GET['mode'] : 'cloud') ;
+
+if (isset($dirname) && !empty($dirname) && $dirname != basename(__DIR__))
 {
-	$GLOBALS['xoopsModule'] = xoops_getHandler('module')->getByDirname($_GET['dirname']);
+	$GLOBALS['xoopsModule'] = xoops_getHandler('module')->getByDirname($dirname);
 	$modid = $GLOBALS['xoopsModule']->getVar('mid');
 }
 
-$term   = empty($_GET["term"]) ? '' : $_GET["term"];
-$termid = intval( empty($_GET["id"]) ? 0 : $_GET["id"] );
-$catid  = intval( empty($_GET["catid"]) ? 0 : $_GET["catid"] );
-$start  = intval( empty($_GET["start"]) ? 0 : $_GET["start"] );
-$sort   = empty($_GET["sort"]) ? "time" : $_GET["sort"] ;
-$order  = empty($_GET["order"]) ? "DESC" : $_GET["order"] ;
-$mode   = empty($_GET["mode"]) ? "cloud" : (in_array($_GET["mode"], array('list','cloud'))? $_GET['mode'] : 'cloud') ;
-
-
-if (!is_object($GLOBALS["xoopsModule"]) || "tag" != $GLOBALS["xoopsModule"]->getVar("dirname", "n")) {
+if (!is_object($GLOBALS["xoopsModule"]) || basename(__DIR__)!= $GLOBALS["xoopsModule"]->getVar("dirname", "n")) {
 	xoops_loadLanguage("main", "tag");
 }
 

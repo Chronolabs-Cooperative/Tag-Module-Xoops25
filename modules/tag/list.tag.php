@@ -23,7 +23,7 @@
  */
 
 global $tagModule, $tagConfigsList, $tagConfigs, $tagConfigsOptions;
-global $modid, $term, $termid, $catid, $start, $sort, $order, $mode;
+global $modid, $term, $termid, $catid, $start, $sort, $order, $mode, $dirname;
 
 include dirname(__FILE__) . "/header.php";
 
@@ -102,15 +102,14 @@ $font_ratio = ($count_interval) ? ($font_max - $font_min) / $count_interval : 1;
 
 $tags_data = array();
 foreach (array_keys($tags) as $key) {
+	$tag_obj = $tag_handler->get($tags[$key]["id"]);
     $tags_data[] = array(
-                    /*
-                     * Font-size = ((tag.count - count.min) * (font.max - font.min) / (count.max - count.min) ) * 100%
-                     */
-                    "id"        => $tags[$key]["id"],
-                    "font"      => empty($count_interval) ? 100 : floor( ($tags[$key]["count"] - $count_min) * $font_ratio ) + $font_min,
-                    "level"     => empty($count_max) ? 0 : floor( ($tags[$key]["count"] - $count_min) * $level_limit / $count_max ),
-                    "term"      => $tags[$key]["term"],
-                    "count"     => $tags[$key]["count"],
+                    	"id"        => $tags[$key]["id"],
+                    	"font"      => empty($count_interval) ? 100 : floor( ($tags[$key]["count"] - $count_min) * $font_ratio ) + $font_min,
+                    	"level"     => empty($count_max) ? 0 : floor( ($tags[$key]["count"] - $count_min) * $level_limit / $count_max ),
+                    	"term"      => $tags[$key]["term"],
+                   		"count"     => $tags[$key]["count"],
+    					"url" 		=> $tag_obj->getURL()
                     );
 }
 unset($tags, $tags_term);

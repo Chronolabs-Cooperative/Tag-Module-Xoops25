@@ -23,7 +23,7 @@
  */
 
 global $tagModule, $tagConfigsList, $tagConfigs, $tagConfigsOptions;
-global $modid, $term, $termid, $catid, $start, $sort, $order, $mode;
+global $modid, $term, $termid, $catid, $start, $sort, $order, $mode, $dirname;
 
 include dirname(__FILE__) . "/header.php";
 
@@ -50,9 +50,15 @@ if (!empty($termid)) {
 if ($tagConfigsList['htaccess'])
 {
 	if (is_object($GLOBALS["xoopsModule"]) || "tag" != $GLOBALS["xoopsModule"]->getVar("dirname", "n")) {
-		$url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/view/tag/$start/$sort/$order/$mode/$termid-" . $GLOBALS["xoopsModule"]->getVar("dirname", "n") . $tagConfigsList['html'];
+		if (!empty($term))
+			$url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/view/tag/$start/$sort/$order/$mode/$term-" . $GLOBALS["xoopsModule"]->getVar("dirname", "n") . $tagConfigsList['html'];
+		else
+			$url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/view/tag/$start/$sort/$order/$mode/$termid-" . $GLOBALS["xoopsModule"]->getVar("dirname", "n") . $tagConfigsList['html'];
 	} else {
-		$url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/view/tag/$start/$sort/$order/$mode/$termid" . $tagConfigsList['html'];
+		if (!empty($term))
+			$url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/view/tag/$start/$sort/$order/$mode/$term" . $tagConfigsList['html'];
+		else 
+			$url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/view/tag/$start/$sort/$order/$mode/$termid" . $tagConfigsList['html'];
 	}
 	if (!strpos($url, $_SERVER["REQUEST_URI"]))
 	{
@@ -86,7 +92,7 @@ if ($catid >= 0) {
 $items = $tag_handler->getItems($criteria); // Tag, imist, start, sort, order, modid, catid
 
 $items_module = array();
-$modules_obj = array();
+$modules_obj = $res = array();
 if (!empty($items)) {
     foreach (array_keys($items) as $key) {
         $items_module[$items[$key]["modid"]][$items[$key]["catid"]][$items[$key]["itemid"]] = array();
@@ -104,29 +110,39 @@ if (!empty($items)) {
         if (!function_exists($func_tag)) {
             continue;
         }
-        // Return related item infomation: title, content, time, uid, all tags
-        $res = $func_tag($items_module[$mid]);
+        $func_support = "{$dirname}_tag_supported";
+        if (function_exists($func_support)) {
+        	if ($func_support())
+        		$res[$mid]= $func_tag($items_module[$mid]);
+        } else 
+        	$res[$mid]= $func_tag($items_module[$mid]);
     }
 }
 
 $items_data = array();
 $uids = array();
 include_once XOOPS_ROOT_PATH . "/modules/tag/include/tagbar.php";
-foreach (array_keys($items) as $key) {
-    if (!$item = @$items_module[$items[$key]["modid"]][$items[$key]["catid"]][$items[$key]["itemid"]]) continue;
-    $item["module"]     = $modules_obj[$items[$key]["modid"]]->getVar("name");
-    $item["dirname"]    = $modules_obj[$items[$key]["modid"]]->getVar("dirname", "n");
-    $time = empty($item["time"]) ? $items[$key]["time"] : $item["time"];
-    $item["time"]       = formatTimestamp($time, "s");
-    $item["tags"]       = @tagBar($item["tags"]);
-    $items_data[]       = $item;
-    $uids[$item["uid"]] = 1;
+foreach ($res as $modid => $itemsvalues) {
+	foreach($itemvalues as $catid => $values) {
+		foreach($itemvalues as $itemid => $item) {
+			$item["module"]     = $modules_obj[$modid]->getVar("name");
+			$item["dirname"]    = $modules_obj[$modid]->getVar("dirname", "n");
+			$item["tags"]       = @tagBar($item["tags"]);
+    		$items_data[]       = $item;
+    		$uids[$item['uid']] = $item['uid'];
+		}
+	}
 }
 xoops_load("UserUtility");
 $users = XoopsUserUtility::getUnameFromIds(array_keys($uids));
 
 foreach (array_keys($items_data) as $key) {
-    $items_data[$key]["uname"] = $users[$items_data[$key]["uid"]];
+	if (isset($items_data[$key]["uid"]) && !empty($items_data[$key]["uid"]) && $items_data[$key]["uid"] != 0)
+	{
+		if (!isset($items_data[$key]["uname"]) || empty($items_data[$key]["uname"]))
+			$items_data[$key]["uname"] = $users[$items_data[$key]["uid"]];
+		$items_data[$key]["userurl"] = XOOPS_URL . '/userinfo.php?uid=' . $items_data[$key]["uid"];
+	}
 }
 
 if ( !empty($start) || count($items_data) >= $limit) {
@@ -152,7 +168,7 @@ $xoopsTpl->assign("tag_id", $termid);
 $xoopsTpl->assign("tag_term", $term);
 $xoopsTpl->assign("tag_page_title", $page_title);
 $xoopsTpl->assign_by_ref("tag_addon", $tag_addon);
-$xoopsTpl->assign_by_ref("tag_articles", $items_data);
+$xoopsTpl->assign_by_ref("tag_data", $items_data);
 $xoopsTpl->assign_by_ref("pagenav", $pagenav);
 
 $xoopsTpl -> assign("xoops_pagetitle", $page_title);

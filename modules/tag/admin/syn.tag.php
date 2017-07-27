@@ -31,9 +31,6 @@ $indexAdmin = new ModuleAdmin();
 echo $indexAdmin->addNavigation(basename(__FILE__));
 echo $indexAdmin->renderIndex();
 
-include XOOPS_ROOT_PATH . "/modules/tag/include/vars.php";
-echo function_exists("loadModuleAdminMenu") ? loadModuleAdminMenu(2) : "";
-
 $limit = 10;
 $modid = intval( @$_GET['modid'] );
 $start = intval( @$_GET['start'] );

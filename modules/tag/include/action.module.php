@@ -22,9 +22,6 @@
  * @link			http://internetfounder.wordpress.com
  */
 
-if (!defined('XOOPS_ROOT_PATH')) { exit(); }
-defined("TAG_INI") || include dirname(__FILE__) . "/vars.php";
-
 function xoops_module_install_tag($module)
 {
     return true;
@@ -32,18 +29,6 @@ function xoops_module_install_tag($module)
 
 function xoops_module_pre_install_tag($module)
 {
-    if (substr(XOOPS_VERSION, 0, 9) < "XOOPS 2.3") {
-        $module->setErrors( "The module only works for XOOPS 2.3+" );
-        return false;
-    }
-    
-    /*
-    if (!file_exists(XOOPS_ROOT_PATH . "/Frameworks/art/functions.ini.php")) {
-        $module->setErrors( "The module requires /Frameworks/art/" );
-        return false;
-    }
-    */
-    
     $mod_tables = $module->getInfo("tables");
     foreach ($mod_tables as $table) {
         $GLOBALS["xoopsDB"]->queryF("DROP TABLE IF EXISTS " .  $GLOBALS["xoopsDB"]->prefix($table) . ";");
@@ -63,16 +48,16 @@ function xoops_module_pre_uninstall_tag($module)
 
 function xoops_module_update_tag($module, $prev_version = null)
 {
-    //load_functions("config");
-    //mod_clearConfg($module->getVar("dirname", "n"));
-    
     if ($prev_version <= 150) {
-        $GLOBALS['xoopsDB']->queryFromFile(XOOPS_ROOT_PATH . "/modules/" . $module->getVar("dirname") . "/sql/mysql.150.sql");
+        $GLOBALS['xoopsDB']->queryFromFile(dirname(__DIR__) . "/sql/mysql.150.sql");
     }
     
-    /* Do some synchronization */
-    include_once XOOPS_ROOT_PATH . "/modules/" . $module->getVar("dirname") . "/include/functions.recon.php";
-    //mod_loadFunctions("recon", $module->getVar("dirname"));
+    if ($prev_version <= 230) {
+    	$GLOBALS['xoopsDB']->queryFromFile(dirname(__DIR__) . "/sql/mysql.230.sql");
+    }
+    
+    // Sync Tags
+    require_once __DIR__ . DIRECTORY_SEPARATOR . 'functions.php';
     tag_synchronization();
     return true;
 }

@@ -82,8 +82,8 @@ define("TAG_MI_BLOCK_CUMULUS_DESC","");
 define("TAG_MI_ADMENU_INDEX","Admin Homepage");
 define("TAG_MI_ADMENU_EDIT","Tag Admin");
 define("TAG_MI_ADMENU_SYNCHRONIZATION","Synchronization");
-define("TAG_MI_ADMENU_HTACCESS", ".htaccess Settings");
-define("TAG_MI_ADMENU_PLUGINS", "Plugins Compatiability");
+define("TAG_MI_ADMENU_HTACCESS", ".htaccess Config");
+define("TAG_MI_ADMENU_PLUGINS", "Plugins");
 
 //Version 3.01
 

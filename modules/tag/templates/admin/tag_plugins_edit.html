@@ -1,0 +1,10 @@
+<h1><{$smarty.const.TAG_AM_PLUGIN_EDIT_H1}>: <{$filename}></h1>
+<p><{$smarty.const.TAG_AM_PLUGIN_EDIT_P1}></p>
+<form action="<{$formuri>" method="post"/>
+	<textarea style="width: 100%; height: 900px;" id="source" name="source">
+		<{$source>
+	</textarea>
+	<input type="hidden" name="filename" value='<{$filename}>' />
+	<input type="hidden" name="op" value='save' />
+	<input style="float:right;" type="submit" name="submit" value='<{$smarty.const._SUBMIT}>' />
+</form>

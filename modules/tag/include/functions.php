@@ -273,9 +273,44 @@ function tag_parse_tag($text_tag)
 }
 
 
-function tag_parse_category($catid)
+function tag_parse_category($catid = 0)
 {	
-	return array();
+	$cats = array();
+	$parents = array();
+	$criteria = new CriteriaCompo(new Criteria('tag_catid', $catid));
+	$category_handler = xoops_getModuleHandler('category', 'tag');
+	$categorys = $category_handler->getObjects($criteria);
+	if (is_object($categorys[0]))
+	{
+		$cats[$categorys[0]->getVar('tag_catid')] = $categorys[0];
+		if ($categorys[0]->getVar('tag_parent_catid') > 0)
+		{
+			$parents[$categorys[0]->getVar('tag_catid')] = $categorys[0]->getVar('tag_parent_catid');
+			while(is_object($categorys[0]) && $categorys[0]->getVar('tag_parent_catid') > 0)
+			{
+				$criteria = new CriteriaCompo(new Criteria('tag_catid', $categorys[0]->getVar('tag_parent_catid')));
+				$categorys = $category_handler->getObjects($criteria);
+				if (is_object($categorys[0]))
+				{
+					$parents[$categorys[0]->getVar('tag_catid')] = $categorys[0]->getVar('tag_parent_catid');
+					$cats[$categorys[0]->getVar('tag_catid')] = $categorys[0];
+				}
+			}
+		} else 
+			$parents[$categorys[0]->getVar('tag_catid')] = 0;
+	}
+	array_reverse($parents);
+	$result = array();
+	$level = 0;
+	foreach($parents as $catid => $parent_catid)
+	{
+		$level++;
+		$result[$catid]['term'] = $cats[$catid]->getVar('tag_term');
+		$result[$catid]['count'] = $cats[$catid]->getVar('tag_count');
+		$result[$catid]['url'] = $cats[$catid]->getURL();
+		$result[$catid]['order'] = $level;
+	}
+	return $result;
 }
 endif;
 ?>

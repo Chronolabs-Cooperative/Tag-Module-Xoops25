@@ -31,17 +31,22 @@ $adminmenu = array();
 
 $adminmenu[]= array("link"    => "admin/index.php",
 					"icon"	  => "home.png",
+					"image"	  => "home.png",
                     "title"    => TAG_MI_ADMENU_INDEX);
 $adminmenu[]= array("link"    => "admin/admin.tag.php",
-					"icon"	  => "add.png",
+					"icon"	  => "edit.png",
+					"image"	  => "edit.png",
                     "title"    => TAG_MI_ADMENU_EDIT);
 $adminmenu[]= array("link"    => "admin/syn.tag.php",
 					"icon"	  => "export.png",
+					"imge"	  => "export.png",
                     "title"    => TAG_MI_ADMENU_SYNCHRONIZATION);
 $adminmenu[]= array("link"    => "admin/htaccess.tag.php",
 					"icon"	  => "content.png",
+					"image"	  => "content.png",
 					"title"    => TAG_MI_ADMENU_HTACCESS);
 $adminmenu[]= array("link"    => "admin/plugins.tag.php",
 					"icon"	  => "exec.png",
+					"image"	  => "exec.png",
 					"title"    => TAG_MI_ADMENU_PLUGINS);
 ?>

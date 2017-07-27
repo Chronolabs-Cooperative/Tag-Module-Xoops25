@@ -1,0 +1,28 @@
+<h1><{$smarty.const.TAG_AM_PLUGIN_LIST_H1}></h1>
+<p><{$smarty.const.TAG_AM_PLUGIN_LIST_P1}></p>
+<table border='0' cellpadding='4' cellspacing='1' width='100%' class='outer'>
+	<tr align='center'>";
+		<td class='bg3'><{$smarty.const.TAG_AM_PLUGIN_FILENAME}></td>
+		<td class='bg3' width='10%'><{$smarty.const.TAG_AM_PLUGIN_MODULE}></td>
+		<td class='bg3' width='10%'><{$smarty.const.TAG_AM_PLUGIN_VERSION}></td>
+		<td class='bg3' width='10%'><{$smarty.const.TAG_AM_PLUGIN_ACTIVE}></td>
+		<td class='bg3' width='10%'><{$smarty.const.TAG_AM_PLUGIN_MISSING}></td>
+		<td class='bg3' width='10%'><{$smarty.const.TAG_AM_PLUGIN_ACTIONS}></td>
+	</tr>
+	<tr>
+		<td colspan='5'><{$smarty.const.TAG_AM_PLUGIN_TOTAL}>&nbsp;<{$totalplugin}>&nbsp;-&nbsp;<{$smarty.const.TAG_AM_PLUGIN_VALID}>&nbsp;<{$validplugin}></td>
+	</tr>
+	<{foreach item=plugin from=$plugins}>
+    <tr class='<{cycle values="even,odd"}>' align="center">
+     	<td><{$plugin.filename}></td>
+     	<td><{$plugin.module}></td>
+     	<td><{$plugin.version}></td>
+     	<td><{$plugin.active}></td>
+     	<td style="text-align: left; color: rgb(250,0,0); font-size: 0.56em; font-weight: bold"><{$plugin.missing}></td>
+     	<td>
+     		<a href="<{$xoops_url}>/modules/tag/admin/plugins.tag.php?op=edit&filename=<{$plugin.filename}>"><img src="<{$xoops_url}>/modules/tag/images/edit.png" /></a>&nbsp;
+     		<a href="<{$xoops_url}>/modules/tag/admin/plugins.tag.php?op=delete&filename=<{$plugin.filename}>"><img src="<{$xoops_url}>/modules/tag/images/delete.png" /></a>
+     	</td>
+    </tr>
+    <{/foreach}>
+</table>

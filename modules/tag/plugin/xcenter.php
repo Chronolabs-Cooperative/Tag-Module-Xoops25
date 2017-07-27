@@ -24,21 +24,22 @@ if (!defined('XOOPS_ROOT_PATH')) { exit(); }
 /**
  * Get item fields:
  * 
- * title
- * content
- * category
- * time
- * link
- * uid
- * uname
- * tags
+ * title		string
+ * content		string (html)
+ * category		array()
+ * time			string
+ * link			string
+ * url			string (full path)
+ * uid			integer
+ * uname		string
+ * tags			array
  *
  * @var        array    $items    associative array of items: [modid][catid][itemid]
  *
  * @return    boolean
  * 
  */
-function xcenter_tag_iteminfo(&$items)
+function xcenter_tag_iteminfo($items)
 {
     if (empty($items) || !is_array($items)) {
         return false;
@@ -64,7 +65,8 @@ function xcenter_tag_iteminfo(&$items)
                 "title"     => $item_obj->getVar("subject"),
                 "uid"       => $item_obj->getVar("uid"),
                 "link"      => "index.php?id={$item_id}",
-                "time"      => strtotime($item_obj->getVar("date")),
+                "url"       => XOOPS_URL . "/modules/xcenter/index.php?storyid={$item_id}",
+                "time"      => formatTimestamp(strtotime($item_obj->getVar("date")), "s"),
                 "tags"      => tag_parse_tag($item_obj->getVar("tags", "n")),
                 "category"  => tag_parse_category($cat_id),
                 "content"   => $myts->displayTarea($item_obj->getVar("page_description"),true,true,true,true,true,true)
@@ -72,6 +74,7 @@ function xcenter_tag_iteminfo(&$items)
         }
     }
     unset($items_obj);    
+    return $items;
 }
 
 /**
@@ -118,7 +121,7 @@ function xcenter_tag_synchronization($mid)
  * @param integer $catid
  * @return array
  */
-function xcenter_category($catid)
+function xcenter_tag_category($catid)
 {
 	$category_handler =& xoops_getmodulehandler('category', 'xcenter');
 	$cat = $category_handler->getCategory($catid);
@@ -130,7 +133,7 @@ function xcenter_category($catid)
  * 
  * @return boolean
  */
-function xcenter_supported()
+function xcenter_tag_supported()
 {
 	global $xcenterModule, $xcenterConfigsList, $xcenterConfigs, $xcenterConfigsOptions;
 	
@@ -147,4 +150,17 @@ function xcenter_supported()
 	}
 	return false;
 }
+
+
+/**
+ * Gets support versions of the child module (xcenter) and this parent module (tag)
+ *
+ * @param integer $catid
+ * @return array
+ */
+function xcenter_tag_version()
+{
+	return array('child' => 2.16, 'parent' => 3.01);
+}
+
 ?>

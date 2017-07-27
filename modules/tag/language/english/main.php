@@ -14,6 +14,7 @@ if (!defined('XOOPS_ROOT_PATH')) { exit(); }
 
 define("TAG_MD_TAGS","Tags");
 define("TAG_MD_TAG_ON","Tag On");
+define("TAG_MD_TAGCATEGORYVIEW", "Items of Category <strong>%1\$s</strong> in %2\$s");
 define("TAG_MD_TAGVIEW","Items of Tag <strong>%1\$s</strong> in %2\$s");
 define("TAG_MD_TAGLIST","Tag List of <strong>%s</strong>");
 define("TAG_MD_JUMPTO","Jump to");
