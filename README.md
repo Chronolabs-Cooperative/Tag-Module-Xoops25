@@ -57,7 +57,7 @@ Editing File Example: /modules/tag/plugin/mymodule.php
 
 ### Get item fields: title, content, time, link, uid, uname, tags
 
-    function mymodule_iteminfo(&$items)
+    function mymodule_tag_iteminfo(&$items)
     {
         $items_id = array();
         foreach (array_keys($items) as $cat_id) {
@@ -93,7 +93,7 @@ Editing File Example: /modules/tag/plugin/mymodule.php
 
 ### Remove orphan tag-item links
 
-    function mymodule_synchronization($mid) 
+    function mymodule_tag_synchronization($mid) 
     {
         // Optional
     }
@@ -102,7 +102,7 @@ Editing File Example: /modules/tag/plugin/mymodule.php
 
 ### Get item fields: catid, parentid, term
 
-    function mymodule_category($catid) 
+    function mymodule_tag_category($catid) 
     {
         return array('catid'=>0, 'parentid' =>0, 'term' =>'Category Title');
     }
@@ -111,7 +111,7 @@ Editing File Example: /modules/tag/plugin/mymodule.php
 
 ### Return Boolean
 
-    function mymodule_supported() 
+    function mymodule_tag_supported() 
     {
         return false;
     }
@@ -120,7 +120,7 @@ Editing File Example: /modules/tag/plugin/mymodule.php
 
 ### Return Array
 
-    function mymodule_version() 
+    function mymodule_tag_version() 
     {
         return array('parent' => 3.02, 'child' => 1.69);
     }
@@ -221,7 +221,7 @@ This file belongs in /modules/mymodule/blocks and is adjustable in function name
      function mymodule_block_cloud_show($options) 
      {
          include_once XOOPS_ROOT_PATH . "/modules/tag/blocks/block.php";
-         return block_cloud_show($options, basename(dirname(dirname(dirname(__DIR__)))));
+         return block_cloud_show($options, basename(dirname(__DIR__)));
      }
      function mymodule_block_cloud_edit($options) 
      {
@@ -231,7 +231,7 @@ This file belongs in /modules/mymodule/blocks and is adjustable in function name
      function mymodule_block_top_show($options) 
      {
          include_once XOOPS_ROOT_PATH . "/modules/tag/blocks/block.php";
-         return block_top_show($options, basename(dirname(dirname(dirname(__DIR__)))));
+         return block_top_show($options, basename(dirname(__DIR__));
      }
      function mymodule_block_top_edit($options) 
      {
@@ -246,7 +246,7 @@ This file belongs in /modules/mymodule/blocks and is adjustable in function name
      function mymodule_block_cumulus_show($options) 
      {
          include_once XOOPS_ROOT_PATH . "/modules/tag/blocks/block.php";
-         return block_cumulus_show($options, basename(dirname(dirname(dirname(__DIR__)))));
+         return block_cumulus_show($options, basename(dirname(__DIR__)));
      }
      function mymodule_block_cumulus_edit($options) 
      {
