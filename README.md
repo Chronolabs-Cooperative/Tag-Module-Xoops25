@@ -13,15 +13,18 @@ Check http://en.wikipedia.org/wiki/Tags for more info about "tag"
 The following goes in the .htaccess if your running apache2 in the XOOPS_ROOT_PATH
 
     RewriteEngine On
-    RewriteRule ^tags/index.html                  										./modules/tag/index.php                           					[L,NC,QSA]
-    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+).html     		./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&termid=$7   					[L,NC,QSA]
-    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/([0-9]+).html     	./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$7&termid=$8       					[L,NC,QSA]
-    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)-(.*?).html     		./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&termid=$7&dirname=$8           			[L,NC,QSA]
-    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/([0-9]+)-(.*?).html  	./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$4&termid=$7&dirname=$8       		[L,NC,QSA]
-    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/(.*?).html     			./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&term=$7              					[L,NC,QSA]
-    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/(.*?).html     		./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$7&term=$8       					[L,NC,QSA]
-    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/(.*?)-(.*?).html     		./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&term=$7&dirname=$8           			[L,NC,QSA]
-    RewriteRule ^tags/(view|list)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/(.*?)-(.*?).html     	./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$7&term=$8&dirname=$9       			[L,NC,QSA]
+    RewriteRule ^tags/index.html ./modules/tag/index.php [L,NC,QSA]
+    RewriteRule ^tags/index-(.*?).html ./modules/tag/index.php?dirname=$1 [L,NC,QSA]
+    RewriteRule ^tags/feed.rss ./modules/tag/backend.php [L,NC,QSA]
+    RewriteRule ^tags/feed-(.*?).rss ./modules/tag/backend.php?dirname=$1 
+    RewriteRule ^tags/(view|list|feed)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)(.html|.rss) ./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&termid=$7 [L,NC,QSA]
+    RewriteRule ^tags/(view|list|feed)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/([0-9]+)(.html|.rss) ./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$7&termid=$8 [L,NC,QSA]
+    RewriteRule ^tags/(view|list|feed)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)-(.*?)(.html|.rss) ./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&termid=$7&dirname=$8 [L,NC,QSA]
+    RewriteRule ^tags/(view|list|feed)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/([0-9]+)-(.*?)(.html|.rss) ./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$4&termid=$7&dirname=$8 [L,NC,QSA]
+    RewriteRule ^tags/(view|list|feed)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/(.*?)(.html|.rss) ./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&term=$7 [L,NC,QSA]
+    RewriteRule ^tags/(view|list|feed)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/(.*?)(.html|.rss) ./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$7&term=$8 [L,NC,QSA]
+    RewriteRule ^tags/(view|list|feed)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/(.*?)-(.*?)(.html|.rss) ./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&term=$7&dirname=$8 [L,NC,QSA]
+    RewriteRule ^tags/(view|list|feed)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/(.*?)-(.*?)(.html|.rss) ./modules/tag/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$7&term=$8&dirname=$9 [L,NC,QSA]
 
 # Usage of the Tag Module in your XOOPS Module
 

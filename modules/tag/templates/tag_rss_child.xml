@@ -1,0 +1,16 @@
+<{assign item=tabs value=str_repeat(chr(9), (!isset($levels)?0:$levels))}>
+<{foreach from=$values item=value key=element}>
+<{$tabs}><{$element}><{if (is_array($value) && count($value) == 0) || empty($value)}> /><{elseif is_array($value.attributes) && count($value.attributes) >= 0}><{foreach from=$value.attributes item=nvalue key=node}> <{$tabs}><{$node}>="<{$nvalue}>"<{/foreach}><{if !empty($value.attributes.value) && !is_array($value.attributes.value)}>><{$value.attributes.value}></<{$element}>><{elseif empty($value.attributes.value)}>/ ><{/if}>
+<{if !empty($value.attributes.value) && is_array($value.attributes.value)}>>
+	<{assign item=levels value=$levels+1}>
+	<{$tabs}><{includeq src=$rss_child_template values=$value.attributes.value levels=$levels}>
+	<{assign item=levels value=$levels-1}>
+<{$tabs}></<{$element}>>
+<{/if}>
+<{elseif is_array($value) && !isset($value.attributes)}>>
+	<{assign item=levels value=$levels+1}>
+	<{$tabs}><{includeq src=$rss_child_template values=$value levels=$levels}>
+	<{assign item=levels value=$levels-1}>
+<{$tabs}></<{$element}>>
+<{elseif !is_array($value) && !empty($value)}>><{$value}></<{$element}>><{/if}>
+<{/foreach}>
