@@ -1,3 +1,7 @@
+<div style="float: right; padding-right: 20px; width: auto; clear: none;">
+	<a href="<{$tag_rss_url}>" target="_blank"><img src="<{$tag_images_path}>/rss.gif" /></a>
+</div>
+
 <div class="tag-page-title">
 	<h3>
 		<a href="<{$xoops_url}>/modules/<{$xoops_dirname}>/" title="<{$module_name}>"><{$module_name}></a> &raquo; 
@@ -23,8 +27,7 @@
 	</div>
 	<div class="tag-item-meta" style="padding-left: 10px;">
 		<a href="<{$article.userurl}>" title="<{$article.uname}>"><{$article.uname}></a> <{$article.time}><br />
-		<{assign var=tagbar value=$article.tags}>
-		<{include file="db:tag_bar.html"}>
+		<{includeq file=$tag_bar_template tagbar=$article.tags}>
 	</div>
 	<div class="tag-item-content">
 		<{$article.content}>

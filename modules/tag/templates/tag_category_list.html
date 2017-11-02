@@ -1,12 +1,12 @@
 <h1>Categories & Tags</h1>
 <table>
 	<{assign var=column value=1}>
-	<{foreach item=category from=$data}>
-	<{if $column==1}>
+	<{foreach item=$category from=$data}>
+	<{if $column=1}>
 	<tr>
 	<{assign var=column value=2}>
 	<{/if}>
-	<{if $column==4}>
+	<{if $column=4}>
 		<td>
 			<div style="height: auto; valign: middle; text-align: center;">
 				<div style="height: auto; valign: middle; text-align: left;">
@@ -18,9 +18,9 @@
 					<{/foreach}>
 				</div>
 			</div>
-			<{if isset($category.children) }>
+			<{if isset($category.children)) }>
 			<div style="font-size: 89%; margin-left: 16px; margin-top: 6px;">
-			<{foreach item=child from=$category.children}>
+			<{foreach item=$child from=$category.children}>
 				<div style="height: auto; valign: middle; text-align: justify;">
 					<div style="height: auto; valign: middle; text-align: left;">
 						<font style="145%"><a href="<{$child.url}>"><{$child.title}></a></font>&nbsp;<font style="85%">(<{$child.count}>)</font>
@@ -36,8 +36,8 @@
 			<{/if}>
 		</td>
 	<{assign var=column value=5}>
-	<{/if}>
-	<{if $column==3}>
+	<{/if}
+	<{if $column=3}>
 		<td>
 			<div style="height: auto; valign: middle; text-align: center;">
 				<div style="height: auto; valign: middle; text-align: left;">
@@ -49,9 +49,9 @@
 					<{/foreach}>
 				</div>
 			</div>
-			<{if isset($category.children) }>
+			<{if isset($category.children)) }>
 			<div style="font-size: 89%; margin-left: 16px; margin-top: 6px;">
-			<{foreach item=child from=$category.children}>
+			<{foreach item=$child from=$category.children}>
 				<div style="height: auto; valign: middle; text-align: justify;">
 					<div style="height: auto; valign: middle; text-align: left;">
 						<font style="145%"><a href="<{$child.url}>"><{$child.title}></a></font>&nbsp;<font style="85%">(<{$child.count}>)</font>
@@ -68,7 +68,7 @@
 		</td>
 	<{assign var=column value=4}>
 	<{/if}>
-	<{if $column==1}>
+	<{if $column=1}>
 		<td>
 			<div style="height: auto; valign: middle; text-align: center;">
 				<div style="height: auto; valign: middle; text-align: left;">
@@ -80,9 +80,9 @@
 					<{/foreach}>
 				</div>
 			</div>
-			<{if isset($category.children) }>
+			<{if isset($category.children)) }>
 			<div style="font-size: 89%; margin-left: 16px; margin-top: 6px;">
-			<{foreach item=child from=$category.children}>
+			<{foreach item=$child from=$category.children}>
 				<div style="height: auto; valign: middle; text-align: justify;">
 					<div style="height: auto; valign: middle; text-align: left;">
 						<font style="145%"><a href="<{$child.url}>"><{$child.title}></a></font>&nbsp;<font style="85%">(<{$child.count}>)</font>
@@ -99,18 +99,13 @@
 		</td>
 	<{assign var=column value=3}>
 	<{/if}>
-	<{if $column==5}>
+	<{if $column=5}>
 	</tr>
 	<{assign var=column value=1}>
 	<{/if}>
-	<{/foreach}>
 	<{if $column<5}>
-	<{php}>
-		$this->_tpl_vars['columns'] = 3 - $this->_tpl_vars['column'] - 1;
-	<{/php}>
-	<{if $columns >= 1}>
-		<td colspan="<{$columns}>">&nbsp;</td>
-	<{/if}>
+	<{assign var=columns value=(3-$column-2) }>
+		<td colspan="<{$columns}">&nbsp;</td>
 	</tr>
-	<{/if}>
+	<{/if}<
 </table>

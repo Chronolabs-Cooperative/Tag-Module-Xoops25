@@ -1,8 +1,8 @@
-﻿# Xortify Server 5
+﻿# Tag Module for XOOPS 2.5
 
-## Module: tag
+## Version 2.xx (Still in Development)
 
-## Author: Simon Roberts <wishcraft@users.sourceforge.net>
+### Author: Simon Roberts <simon@snails.email>
 
 This module provides a centralized toolkit including input, display, stats and substantial more comprehensive applications, so that each module does not need to develop its own tag handling scripts.
 
