@@ -64,30 +64,6 @@ class TagTag extends XoopsObject
     	}
     	return $url;
     }
-    
-    
-    function getRSSURL()
-    {
-        global $tagModule, $tagConfigsList, $tagConfigs, $tagConfigsOptions;
-        global $modid, $term, $termid, $catid, $start, $sort, $order, $mode, $dirname;
-        $start = 0;
-        $sort = "DESC";
-        $order = "time";
-        $mode = "list";
-        $term = $this->getVar('tag_term');
-        if ($tagConfigsList['htaccess'])
-        {
-            if (is_object($GLOBALS["xoopsModule"]) || "tag" != $GLOBALS["xoopsModule"]->getVar("dirname", "n")) {
-                $url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/feed/tag/$start/$sort/$order/$mode/$term-" . $GLOBALS["xoopsModule"]->getVar("dirname", "n") . $tagConfigsList['rss'];
-                
-            } else {
-                $url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/feed/tag/$start/$sort/$order/$mode/$term" . $tagConfigsList['rss'];
-            }
-        } else {
-            $url = XOOPS_URL . "/modules/".basename(dirname(__DIR__)) . "/feed.tag.php?start=$start&sort=$sort&order=$order&mode=$mode&term=$term";
-        }
-        return $url;
-    }
 }
 
 /**

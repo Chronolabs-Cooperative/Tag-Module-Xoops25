@@ -26,62 +26,46 @@
 if (!defined('XOOPS_ROOT_PATH')) { exit(); }
 
 $modversion = array();
-$modversion["name"]         			     = TAG_MI_NAME;
-$modversion["version"]      			     = TAG_MI_VERSION;
-$modversion["description"]  			     = TAG_MI_DESCRIPTION;
-$modversion["dirname"]      			     = basename(__DIR__);
-$modversion['releasedate'] 				     = TAG_MI_RELEASEDATE;
-$modversion['status']      				     = TAG_MI_STATUS;
-$modversion['credits']     				     = TAG_MI_CREDITS;
-$modversion['author']      				     = TAG_MI_AUTHORALIAS;
-$modversion['help']        				     = TAG_MI_HELP;
-$modversion['license']     				     = TAG_MI_LICENCE;
-$modversion['academic']    				     = TAG_MI_ACADEMIC;
-$modversion['official']    				     = TAG_MI_OFFICAL;
-$modversion['image']       				     = TAG_MI_ICON;
-$modversion['dirmoduleadmin'] 			     = TAG_MI_ADMINMODDIR;
-$modversion['icons16'] 					     = TAG_MI_ADMINICON16;
-$modversion['icons32'] 					     = TAG_MI_ADMINICON32;
-$modversion['author']['realname'] 		     = TAG_MI_AUTHORREALNAME;
-$modversion['author']['website']['url']      = TAG_MI_AUTHORWEBSITE;
-$modversion['author']['website']['name'] 	 = TAG_MI_AUTHORSITENAME;
-$modversion['author']['email'] 			     = TAG_MI_AUTHOREMAIL;
-$modversion['author']['word'] 				 = TAG_MI_AUTHORWORD;
-$modversion['author']['feed'] 				 = TAG_MI_AUTHORFEED;
-$modversion['warning']['install'] 			 = TAG_MI_WARNINGS_INSTALL;
-$modversion['warning']['update'] 			 = TAG_MI_WARNINGS_UPDATE;
-$modversion['warning']['uninstall'] 	     = TAG_MI_WARNINGS_UNINSTALL;
-$modversion['demo']['site']['url'] 			 = TAG_MI_DEMO_SITEURL;
-$modversion['demo']['site']['name'] 		 = TAG_MI_DEMO_SITENAME;
-$modversion['support']['site']['url'] 		 = TAG_MI_SUPPORT_SITEURL;
-$modversion['support']['site']['name'] 		 = TAG_MI_SUPPORT_SITENAME;
-$modversion['submit']['form']['feature'] 	 = TAG_MI_SUPPORT_FEATUREREQUEST;
-$modversion['submit']['form']['bug'] 		 = TAG_MI_SUPPORT_BUGREPORTING;
-
-// People Arrays
-$modversion['people']['developers']['phppp']['name'] = 'Taiwen Jaing';
-$modversion['people']['developers']['phppp']['email'] = 'phppp@users.sourceforge.net';
-$modversion['people']['developers']['phppp']['handle'] = 'phppp';
-$modversion['people']['developers']['phppp']['version'] = array('2.30');
-$modversion['people']['developers']['wishcraft']['name'] = 'Simon Antony Roberts';
-$modversion['people']['developers']['wishcraft']['email'] = 'wishcraft@users.sourceforge.net';
-$modversion['people']['developers']['wishcraft']['handle'] = 'wishcraft';
-$modversion['people']['developers']['wishcraft']['version'] = array('3.00', '3.01', '3.05');
-$modversion['people']['testers'] = array();
-$modversion['people']['translaters'] = array();
-$modversion['people']['documenters'] = array();
-
-// Releases Identity Hashes
-$modversion['keys']['module']        	= 'tagUITU432536';
-$modversion['keys']['release']          = '305jkhr37ryhf';
+$modversion["name"]         			= TAG_MI_NAME;
+$modversion["version"]      			= TAG_MI_VERSION;
+$modversion["description"]  			= TAG_MI_DESC;
+$modversion["dirname"]      			= basename(__DIR__);
+$modversion['releasedate'] 				= TAG_MI_RELEASEDATE;
+$modversion['status']      				= TAG_MI_STATUS;
+$modversion['description'] 				= TAG_MI_DESCRIPTION;
+$modversion['credits']     				= TAG_MI_CREDITS;
+$modversion['author']      				= TAG_MI_AUTHORALIAS;
+$modversion['help']        				= TAG_MI_HELP;
+$modversion['license']     				= TAG_MI_LICENCE;
+$modversion['official']    				= TAG_MI_OFFICAL;
+$modversion['image']       				= TAG_MI_ICON;
+$modversion['module_status'] 			= TAG_MI_STATUS;
+$modversion['website'] 					= TAG_MI_WEBSITE;
+$modversion['dirmoduleadmin'] 			= TAG_MI_ADMINMODDIR;
+$modversion['icons16'] 					= TAG_MI_ADMINICON16;
+$modversion['icons32'] 					= TAG_MI_ADMINICON32;
+$modversion['release_info'] 			= TAG_MI_RELEASEINFO;
+$modversion['release_file'] 			= TAG_MI_RELEASEFILE;
+$modversion['release_date'] 			= TAG_MI_RELEASEDATE;
+$modversion['author_realname'] 			= TAG_MI_AUTHORREALNAME;
+$modversion['author_website_url'] 		= TAG_MI_AUTHORWEBSITE;
+$modversion['author_website_name'] 		= TAG_MI_AUTHORSITENAME;
+$modversion['author_email'] 			= TAG_MI_AUTHOREMAIL;
+$modversion['author_word'] 				= TAG_MI_AUTHORWORD;
+$modversion['status_version'] 			= TAG_MI_VERSION;
+$modversion['warning'] 					= TAG_MI_WARNINGS;
+$modversion['demo_site_url'] 			= TAG_MI_DEMO_SITEURL;
+$modversion['demo_site_name'] 			= TAG_MI_DEMO_SITENAME;
+$modversion['support_site_url'] 		= TAG_MI_SUPPORT_SITEURL;
+$modversion['support_site_name'] 		= TAG_MI_SUPPORT_SITENAME;
+$modversion['submit_feature'] 			= TAG_MI_SUPPORT_FEATUREREQUEST;
+$modversion['submit_bug'] 				= TAG_MI_SUPPORT_BUGREPORTING;
+$modversion['people']['developers'] 	= explode("|", TAG_MI_DEVELOPERS);
+$modversion['people']['testers']		= explode("|", TAG_MI_TESTERS);
+$modversion['people']['translaters']	= explode("|", TAG_MI_TRANSLATERS);
+$modversion['people']['documenters']	= explode("|", TAG_MI_DOCUMENTERS);
 
 // Requirements
-$modversion['minimal']['php']        	= '7.0';
-$modversion['minimal']['xoops']      	= '2.5.8';
-$modversion['minimal']['db']         	= array('mysql' => '5.0.7', 'mysqli' => '5.0.7');
-$modversion['minimal']['admin']      	= '1.1';
-
-// Requirements = Legacy for XOOPS 2.5
 $modversion['min_php']        			= '7.0';
 $modversion['min_xoops']      			= '2.5.8';
 $modversion['min_db']         			= array('mysql' => '5.0.7', 'mysqli' => '5.0.7');
@@ -118,6 +102,37 @@ $modversion["hasComments"] 				= TAG_MI_HASCOMMENTS;
 $modversion["onUpdate"] 				= "include/action.module.php";
 $modversion["onUninstall"] 				= "include/action.module.php";
 
+// Use smarty
+$modversion["use_smarty"] 				= true;
+
+/**
+* Templates
+*/
+$modversion['templates']    			= array();
+$modversion['templates'][1]    			= array(
+											    'file'          => 'tag_index.html',
+											    'description'   => 'Index page of tag module'
+    										);
+$modversion['templates'][]    			= array(
+											    'file'          => 'tag_list.html',
+											    'description'   => 'List of tags'
+											);
+$modversion['templates'][]    			= array(
+											    'file'          => 'tag_view.html',
+											    'description'   => 'Links of a tag'
+											);
+$modversion['templates'][]    			= array(
+											    'file'          => 'tag_bar.html',
+											    'description'   => 'Tag list in an item'
+    										);
+$modversion['templates'][]    			= array(
+												'file'          => 'tag_category_list.html',
+												'description'   => 'List of tags'
+											);
+$modversion['templates'][]    			= array(
+												'file'          => 'tag_category_view.html',
+												'description'   => 'Links of a tag'
+											);
 // Blocks
 $modversion['blocks']    				= array();
 
@@ -224,16 +239,6 @@ $modversion["config"][] 				= array(
 											);
 
 $modversion["config"][] 				= array(
-                                                "name"          => "rss",
-                                                "title"         => "TAG_MI_RSS",
-                                                "description"   => "TAG_MI_RSS_DESC",
-                                                "formtype"      => "text",
-                                                "valuetype"     => "text",
-                                                "default"       => ".rss",
-                                                "category"		=> "seo"
-                                            );
-
-$modversion["config"][] 				= array(
 											    "name"          => "items_perpage",
 											    "title"         => "TAG_MI_ITEMSPERPAGE",
 											    "description"   => "TAG_MI_ITEMSPERPAGE_DESC",
@@ -243,27 +248,6 @@ $modversion["config"][] 				= array(
 												"category"		=> "mod"
     										);
 
-
-$modversion["config"][] 				= array(
-                                                "name"          => "items_perfeed",
-                                                "title"         => "TAG_MI_ITEMSPERFEED",
-                                                "description"   => "TAG_MI_ITEMSPERFEED_DESC",
-                                                "formtype"      => "textbox",
-                                                "valuetype"     => "int",
-                                                "default"       => 15,
-                                                "category"		=> "mod"
-                                            );
-
-
-$modversion["config"][] 				= array(
-                                                "name"          => "items_perbackend",
-                                                "title"         => "TAG_MI_ITEMSPERBACKEND",
-                                                "description"   => "TAG_MI_ITEMSPERBACKEND_DESC",
-                                                "formtype"      => "textbox",
-                                                "valuetype"     => "int",
-                                                "default"       => 2,
-                                                "category"		=> "mod"
-                                            );
 
 $modversion["config"][] 				= array(
 												"name"          => "limit_tag_cloud",
@@ -277,77 +261,7 @@ $modversion["config"][] 				= array(
 
 
 // Notification
+
 $modversion["hasNotification"] 			= 0;
 $modversion["notification"] 			= array();
-
-
-// Feeds
-$modversion["hasFeeds"] 			    = TAG_MI_HASFEEDS;
-$modversion["feed"][] 			        = array(
-                                                "file"          => 'include/feeds.module.php',
-                                                "func"          => 'tag_feed_tags',
-                                                "many"          => 'items_perbackend'
-                                          );
-
-// .htaccess Mod Rewrite
-$i=0;
-$modversion["hasRewrite"]                   = true;
-$modversion["rewrite"]["config"]["base"]    = '%base';
-$modversion["rewrite"]["config"]["html"]    = '%html';
-$modversion["rewrite"]["config"]["rss"]     = '%rss';
-$modversion["rewrite"][++$i]["raw"]         = 'RewriteCond %{REQUEST_FILENAME} !-f';
-$modversion["rewrite"][++$i]["raw"]         = 'RewriteCond %{REQUEST_FILENAME} !-d';
-$i++;
-$modversion["rewrite"][$i]["path"]          = '^%base/index%html';
-$modversion["rewrite"][$i]["resolve"]       = './modules/%dirname/index.php';
-$modversion["rewrite"][$i]["state"]         = 'L,NC,QSA';
-$i++;
-$modversion["rewrite"][$i]["path"]          = '^%base/index-(.*?)%html';
-$modversion["rewrite"][$i]["resolve"]       = './modules/%dirname/index.php?dirname=$1';
-$modversion["rewrite"][$i]["state"]         = 'L,NC,QSA';
-$i++;
-$modversion["rewrite"][$i]["path"]          = '^%base/feed%rss';
-$modversion["rewrite"][$i]["resolve"]       = './modules/%dirname/backend.php';
-$modversion["rewrite"][$i]["state"]         = 'L,NC,QSA';
-$i++;
-$modversion["rewrite"][$i]["path"]          = '^%base/feed-(.*?)%rss';
-$modversion["rewrite"][$i]["resolve"]       = './modules/%dirname/backend.php?dirname=$1';
-$modversion["rewrite"][$i]["state"]         = 'L,NC,QSA';
-$i++;
-$modversion["rewrite"][$i]["path"]          = '^%base/(view|list|feed)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)(%html|%rss)';
-$modversion["rewrite"][$i]["resolve"]       = './modules/%dirname/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&termid=$7';
-$modversion["rewrite"][$i]["state"]         = 'L,NC,QSA';
-$i++;
-$modversion["rewrite"][$i]["path"]          = '^%base/(view|list|feed)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/([0-9]+)(%html|%rss)';
-$modversion["rewrite"][$i]["resolve"]       = './modules/%dirname/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$7&termid=$8';
-$modversion["rewrite"][$i]["state"]         = 'L,NC,QSA';
-$i++;
-$modversion["rewrite"][$i]["path"]          = '^%base/(view|list|feed)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)-(.*?)(%html|%rss)';
-$modversion["rewrite"][$i]["resolve"]       = './modules/%dirname/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&termid=$7&dirname=$8';
-$modversion["rewrite"][$i]["state"]         = 'L,NC,QSA';
-$i++;
-$modversion["rewrite"][$i]["path"]          = '^%base/(view|list|feed)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/([0-9]+)-(.*?)(%html|%rss)';
-$modversion["rewrite"][$i]["resolve"]       = './modules/%dirname/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$4&termid=$7&dirname=$8';
-$modversion["rewrite"][$i]["state"]         = 'L,NC,QSA';
-$i++;
-$modversion["rewrite"][$i]["path"]          = '^%base/(view|list|feed)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/(.*?)(%html|%rss)';
-$modversion["rewrite"][$i]["resolve"]       = './modules/%dirname/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&term=$7';
-$modversion["rewrite"][$i]["state"]         = 'L,NC,QSA';
-$i++;
-$modversion["rewrite"][$i]["path"]          = '^%base/(view|list|feed)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/(.*?)(%html|%rss)';
-$modversion["rewrite"][$i]["resolve"]       = './modules/%dirname/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$7&term=$8';
-$modversion["rewrite"][$i]["state"]         = 'L,NC,QSA';
-$i++;
-$modversion["rewrite"][$i]["path"]          = '^%base/(view|list|feed)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/(.*?)-(.*?)(%html|%rss)';
-$modversion["rewrite"][$i]["resolve"]       = './modules/%dirname/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&term=$7&dirname=$8';
-$modversion["rewrite"][$i]["state"]         = 'L,NC,QSA';
-$i++;
-$modversion["rewrite"][$i]["path"]          = '^%base/(view|list|feed)/(tag|cat)/([0-9]+)/(count|time|term)/(ASC|DESC)/(cloud|list)/([0-9]+)/(.*?)-(.*?)(%html|%rss)';
-$modversion["rewrite"][$i]["resolve"]       = './modules/%dirname/$1.$2.php?start=$3&sort=$4&order=$5&mode=$6&catid=$7&term=$8&dirname=$9';
-$modversion["rewrite"][$i]["state"]         = 'L,NC,QSA';
-
-// Constraints
-$modversion["hasConstraints"] 			= 0;
-$modversion["constraints"] 			    = array();
-
 ?>

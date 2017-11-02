@@ -26,7 +26,7 @@
 if (!defined("TAG_INI")) define("TAG_INI",1);
 
 //include_once XOOPS_ROOT_PATH . "/Frameworks/art/functions.ini.php";
-require_once XOOPS_ROOT_PATH . "/modules/tag/include/functions.ini.php";
+include_once XOOPS_ROOT_PATH . "/modules/tag/include/functions.php";
 
 // include customized variables
 if( is_object($GLOBALS["xoopsModule"]) && "tag" == $GLOBALS["xoopsModule"]->getVar("dirname", "n") ) {

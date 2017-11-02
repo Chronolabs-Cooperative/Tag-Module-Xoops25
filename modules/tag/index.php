@@ -26,7 +26,7 @@
 global $tagModule, $tagConfigsList, $tagConfigs, $tagConfigsOptions;
 global $modid, $term, $termid, $catid, $start, $sort, $order, $mode;
 
-include __DIR__ . "/header.php";
+include dirname(__FILE__) . "/header.php";
 
 $limit = empty($tagConfigsList["limit_tag_cloud"]) ? 100 : $tagConfigsList["limit_tag_cloud"];
 
@@ -47,7 +47,7 @@ if ($tagConfigsList['htaccess'])
 
 
 $page_title = sprintf(TAG_MD_TAGLIST, $xoopsConfig["sitename"]);
-
+$xoopsOption["template_main"] = "tag_index.html";
 include XOOPS_ROOT_PATH . "/header.php";
 // Adds Stylesheet
 $GLOBALS['xoTheme']->addStylesheet(XOOPS_URL."/modules/tag/language/".$GLOBALS['xoopsConfig']['language'].'/style.css');
@@ -89,29 +89,11 @@ foreach (array_keys($tags) as $key) {
 unset($tags, $tags_term);
 $pagenav = "<a href=\"" . XOOPS_URL . "/modules/tag/list.tag.php\">" . _MORE . "</a>";
 
-if (is_object($GLOBALS["xoopsModule"]) || "tag" != $GLOBALS["xoopsModule"]->getVar("dirname", "n"))
-    $rssurl = XOOPS_URL  . "/modules/" . basename(__DIR__) . "/backend.php?dirname=".$GLOBALS["xoopsModule"]->getVar("dirname", "n");
-else
-    $rssurl = XOOPS_URL  . "/modules/" . basename(__DIR__) . "/backend.php";
-if ($tagConfigsList['htaccess'])
-{
-    if (is_object($GLOBALS["xoopsModule"]) || "tag" != $GLOBALS["xoopsModule"]->getVar("dirname", "n")) {
-        $rssurl = XOOPS_URL . "/" . $tagConfigsList['base'] . "/feed" . $GLOBALS["xoopsModule"]->getVar("dirname", "n") . $tagConfigsList['rss'];
-    } else {
-        $rssurl = XOOPS_URL . "/" . $tagConfigsList['base'] . "/feed" . $tagConfigsList['rss'];
-    }
-}
-
-$GLOBALS['xoopsTpl']->assign("tag_images_path", XOOPS_URL  . "/modules/" . basename(__DIR__) . "/images");
-$GLOBALS['xoopsTpl']->assign("tag_rss_url", $rssurl);
 $GLOBALS['xoopsTpl']->assign("lang_jumpto",      TAG_MD_JUMPTO);
 $GLOBALS['xoopsTpl']->assign("pagenav",          $pagenav);
 $GLOBALS['xoopsTpl']->assign("tag_page_title",   $page_title);
 $GLOBALS['xoopsTpl']->assign_by_ref("tags",      $tags_data);
 $GLOBALS['xoopsTpl']->assign("xoops_pagetitle", $page_title);
-
-// Display Template
-$GLOBALS['xoopsTpl']->display(__DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . "tag_index.html");
 
 include_once "footer.php";
 ?>

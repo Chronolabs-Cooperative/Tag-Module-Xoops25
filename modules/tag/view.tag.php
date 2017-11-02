@@ -70,6 +70,7 @@ if ($tagConfigsList['htaccess'])
 $module_name = ("tag" == $xoopsModule->getVar("dirname", "n")) ? $xoopsConfig["sitename"] : $xoopsModule->getVar("name", "n");
 $page_title = sprintf(TAG_MD_TAGVIEW, htmlspecialchars($term), $module_name);
 
+$xoopsOption["template_main"] = "tag_view.html";
 $xoopsOption["xoops_pagetitle"] = strip_tags($page_title);
 include XOOPS_ROOT_PATH . "/header.php";
 // Adds Stylesheet
@@ -162,19 +163,15 @@ if (!empty($GLOBALS["TAG_MD_ADDONS"])) {
     }
 }
 
-$GLOBALS['xoopsTpl']->assign("module_name", $GLOBALS["xoopsModule"]->getVar("name"));
-$GLOBALS['xoopsTpl']->assign("tag_id", $termid);
-$GLOBALS['xoopsTpl']->assign("tag_term", $term);
-$GLOBALS['xoopsTpl']->assign("tag_page_title", $page_title);
-$GLOBALS['xoopsTpl']->assign("tag_rss_url", $tag_obj->getRSSURL());
-$GLOBALS['xoopsTpl']->assign("tag_images_path", XOOPS_URL  . "/modules/" . basename(__DIR__) . "/images");
-$GLOBALS['xoopsTpl']->assign_by_ref("tag_addon", $tag_addon);
-$GLOBALS['xoopsTpl']->assign_by_ref("tag_data", $items_data);
-$GLOBALS['xoopsTpl']->assign_by_ref("pagenav", $pagenav);
-$GLOBALS['xoopsTpl']->assign("xoops_pagetitle", $page_title);
-$GLOBALS['xoopsTpl']->assign("tag_bar_template", __DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . "tag_bar.html");
-// Display Template
-$GLOBALS['xoopsTpl']->display(__DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . "tag_view.html");
+$xoopsTpl->assign("module_name", $GLOBALS["xoopsModule"]->getVar("name"));
+$xoopsTpl->assign("tag_id", $termid);
+$xoopsTpl->assign("tag_term", $term);
+$xoopsTpl->assign("tag_page_title", $page_title);
+$xoopsTpl->assign_by_ref("tag_addon", $tag_addon);
+$xoopsTpl->assign_by_ref("tag_data", $items_data);
+$xoopsTpl->assign_by_ref("pagenav", $pagenav);
+
+$xoopsTpl -> assign("xoops_pagetitle", $page_title);
 
 include_once "footer.php";
 ?>

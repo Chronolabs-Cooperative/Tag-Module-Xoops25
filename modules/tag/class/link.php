@@ -77,36 +77,5 @@ class TagLinkHandler extends XoopsPersistableObjectHandler
     {
         return parent::cleanOrphan($this->db->prefix("tag_tag"), "tag_id");
     }
-    
-    /**
-     * Gets the latest Tag Object array of items;
-     * 
-     * @param number $catid
-     * @param number $modid
-     * @param number $limit
-     * @param number $start
-     */
-    function getLatestTags($catid = 0, $modid = 0, $limit = 10, $start = 0)
-    {
-        global $tagModule, $tagConfigsList, $tagConfigs, $tagConfigsOptions;
-        
-        $criteria = new CriteriaCompo(new Criteria('tag_time', time(), "<="));
-        if (!empty($catid) && $catid<>0)
-            $criteria->add(new Criteria('tag_catid', $catid));
-        if (!empty($modid) && $modid<>0 && $modid != $tagModule->getVar('mid'))
-            $criteria->add(new Criteria('tag_modid', $modid));
-        $criteria->setSort("tag_time");
-        $criteria->setOrder('DESC');
-        $criteria->setStart($start);
-        $criteria->setLimit($limit);
-        $result = array();
-        foreach($this->getObjects($criteria) as $key => $link)
-            if (!isset($result[$link->getVar('tag_id')]))
-                $result[$link->getVar('tag_id')] = xoops_getModuleHandler('tag', basename(dirname(__DIR__)))->get($link->getVar('tag_id'));
-            
-        if (is_array($result) && !empty($result))
-            return $result;
-        return false;
-    }
 }
 ?>

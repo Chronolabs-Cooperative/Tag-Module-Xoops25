@@ -27,7 +27,7 @@ if (!defined('XOOPS_ROOT_PATH')) {
     die("XOOPS root path not defined");
 }
 
-xoops_load("xoopsformtext");
+xoops_load('XoopsFormLoader');
 
 class XoopsFormTag extends XoopsFormText
 {
@@ -41,7 +41,7 @@ class XoopsFormTag extends XoopsFormText
      * @param    mixed    $value      Initial text or itemid
      * @param    int        $catid      category id (applicable if $value is itemid)
      */
-    function XoopsFormTag($name, $size, $maxlength, $value = null, $catid = 0)
+    function __construct($name, $size, $maxlength, $value = null, $catid = 0)
     {
         include XOOPS_ROOT_PATH . "/modules/tag/include/vars.php";
         if (!is_object($GLOBALS["xoopsModule"]) || "tag" != $GLOBALS["xoopsModule"]->getVar("dirname")) {
@@ -59,7 +59,7 @@ class XoopsFormTag extends XoopsFormText
             }
         }
         $caption = TAG_MD_TAGS;
-        $this->XoopsFormText($caption, $name, $size, $maxlength, $value);
+        parent::__construct($caption, $name, $size, $maxlength, $value);
     }
 
     /**

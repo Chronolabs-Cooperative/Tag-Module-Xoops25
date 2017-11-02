@@ -60,7 +60,7 @@ if ($tagConfigsList['htaccess'])
 
 $module_name = ("tag" == $xoopsModule->getVar("dirname")) ? $xoopsConfig["sitename"] : $xoopsModule->getVar("name");
 $page_title = sprintf(TAG_MD_TAGLIST, $module_name);
-
+$xoopsOption["template_main"] = "tag_list.html";
 $xoopsOption["xoops_pagetitle"] = strip_tags($page_title);
 include XOOPS_ROOT_PATH . "/header.php";
 // Adds Stylesheet
@@ -132,9 +132,6 @@ $GLOBALS['xoopsTpl']->assign("lang_jumpto", TAG_MD_JUMPTO);
 $GLOBALS['xoopsTpl']->assign("tag_page_title", $page_title);
 $GLOBALS['xoopsTpl']->assign_by_ref("tags", $tags_data);
 $GLOBALS['xoopsTpl']->assign("xoops_pagetitle", $page_title);
-
-// Display Template
-$GLOBALS['xoopsTpl']->display(__DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . "tag_list.html");
 
 include_once "footer.php";
 ?>

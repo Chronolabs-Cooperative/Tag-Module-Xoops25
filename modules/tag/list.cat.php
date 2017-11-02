@@ -174,15 +174,13 @@ foreach($categories as $category)
 
 $module_name = (basename(__DIR__) == $xoopsModule->getVar("dirname")) ? $xoopsConfig["sitename"] : $xoopsModule->getVar("name");
 $page_title = sprintf(TAG_MD_TAGLIST, $module_name);
+$xoopsOption["template_main"] = "tag_category_list.html";
 $xoopsOption["xoops_pagetitle"] = strip_tags($page_title);
 
 $GLOBALS['xoopsTpl']->assign("data", $result);
 $GLOBALS['xoopsTpl']->assign("lang_jumpto", TAG_MD_JUMPTO);
 $GLOBALS['xoopsTpl']->assign("tag_page_title", $page_title);
 $GLOBALS['xoopsTpl']->assign("xoops_pagetitle", $page_title);
-
-// Display Template
-$GLOBALS['xoopsTpl']->display(__DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . "tag_category_list.html");
 
 include_once "footer.php";
 ?>
