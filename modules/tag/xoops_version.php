@@ -33,7 +33,7 @@ $modversion["dirname"]      			     = basename(__DIR__);
 $modversion['releasedate'] 				     = TAG_MI_RELEASEDATE;
 $modversion['status']      				     = TAG_MI_STATUS;
 $modversion['credits']     				     = TAG_MI_CREDITS;
-$modversion['author']      				     = TAG_MI_AUTHORALIAS;
+$modversion['author']['alias']      	     = TAG_MI_AUTHORALIAS;
 $modversion['help']        				     = TAG_MI_HELP;
 $modversion['license']     				     = TAG_MI_LICENCE;
 $modversion['academic']    				     = TAG_MI_ACADEMIC;
@@ -152,10 +152,6 @@ $modversion["blocks"][]    				= array(
 											    "options"       => "50|30|a",
 											    "template"      => "tag_block_top.html",
     										);
-
-
-// Blocks
-$modversion['blocks']    = array();
 
 /*
  * $options for cumulus:

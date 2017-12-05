@@ -14,7 +14,7 @@ if (!defined('XOOPS_ROOT_PATH')) { exit(); }
 
 // Module definition headers for xoops_version.php
 define('TAG_MI_NAME','Tags');
-define('TAG_MI_VERSION','3.05');
+define('TAG_MI_VERSION','3.07');
 define('TAG_MI_RELEASEDATE','2017/08/30');
 define('TAG_MI_STATUS','final minor');
 define('TAG_MI_DESCRIPTION','Tags for XOOPS');

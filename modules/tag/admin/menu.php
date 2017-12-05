@@ -25,28 +25,26 @@
 
 if (!defined('XOOPS_ROOT_PATH')) { exit(); }
 
-global $adminmenu;
+global $adminmenu, $tagModule;
+
+$tagModule = xoops_getHandler('module')->getByDirname(basename(dirname(__DIR__)));
 
 $adminmenu = array();
 
 $adminmenu[]= array("link"    => "admin/index.php",
-					"icon"	  => "home.png",
-					"image"	  => "home.png",
+                    "icon"	  => $tagModule->getInfo('icons32') . "/home.png",
+                    "image"	  => $tagModule->getInfo('icons32') . "/home.png",
                     "title"    => TAG_MI_ADMENU_INDEX);
 $adminmenu[]= array("link"    => "admin/admin.tag.php",
-					"icon"	  => "edit.png",
-					"image"	  => "edit.png",
+                    "icon"	  => $tagModule->getInfo('icons32') . "/home.png",
+                    "image"	  => $tagModule->getInfo('icons32') . "/home.png",
                     "title"    => TAG_MI_ADMENU_EDIT);
 $adminmenu[]= array("link"    => "admin/syn.tag.php",
-					"icon"	  => "export.png",
-					"imge"	  => "export.png",
+                    "icon"	  => $tagModule->getInfo('icons32') . "/export.png",
+                    "imge"	  => $tagModule->getInfo('icons32') . "/export.png",
                     "title"    => TAG_MI_ADMENU_SYNCHRONIZATION);
 $adminmenu[]= array("link"    => "admin/htaccess.tag.php",
-					"icon"	  => "content.png",
-					"image"	  => "content.png",
+                    "icon"	  => $tagModule->getInfo('icons32') . "/content.png",
+                    "image"	  => $tagModule->getInfo('icons32') . "/content.png",
 					"title"    => TAG_MI_ADMENU_HTACCESS);
-$adminmenu[]= array("link"    => "admin/plugins.tag.php",
-					"icon"	  => "exec.png",
-					"image"	  => "exec.png",
-					"title"    => TAG_MI_ADMENU_PLUGINS);
 ?>

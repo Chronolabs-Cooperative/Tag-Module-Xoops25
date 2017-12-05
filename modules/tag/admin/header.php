@@ -21,13 +21,10 @@
  * @link			https://sourceforge.net/p/xoops/svn/HEAD/tree/XoopsModules/tag
  * @link			http://internetfounder.wordpress.com
  */
-
-include dirname(__DIR__) . "/include/vars.php";
-include_once dirname(__DIR__) . "/include/functions.php";
-$path = dirname(dirname(dirname(__DIR__)));
-include_once dirname(__DIR__) . '/header.php';
-include_once $path . '/include/cp_functions.php';
-require_once $path . '/include/cp_header.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/mainfile.php';
+require_once dirname(__DIR__) . "/include/vars.php";
+require_once dirname(dirname(dirname(__DIR__))) . '/include/cp_header.php';
+require_once dirname(dirname(dirname(__DIR__))) . '/include/cp_functions.php';
 
 global $xoopsModule;
 
@@ -65,7 +62,7 @@ global $tagModule, $tagConfigsList, $tagConfigs, $tagConfigsOptions;
 
 if (empty($tagModule))
 {
-	if (is_a($tagModule = xoops_getHandler('module')->getByDirname(basename(__DIR__)), "XoopsModule"))
+    if (is_a($tagModule = xoops_getHandler('module')->getByDirname(basename(dirname(__DIR__))), "XoopsModule"))
 	{
 		if (empty($tagConfigsList))
 		{
