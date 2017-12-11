@@ -28,9 +28,6 @@ if (!defined('XOOPS_ROOT_PATH')) { exit(); }
 if (!defined("TAG_FUNCTIONS")):
 define("TAG_FUNCTIONS",1);
 
-include XOOPS_ROOT_PATH . "/modules/tag/include/vars.php";
-
-
 function tag_load_config()
 {
 	global $xoopsModuleConfig;

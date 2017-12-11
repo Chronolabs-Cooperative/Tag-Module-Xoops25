@@ -23,14 +23,4 @@
  */
 
 
-if (!defined("TAG_INI")) define("TAG_INI",1);
-
-require_once __DIR__ . DS . "functions.php";
-
-// include customized variables
-if( is_object($GLOBALS["xoopsModule"]) && "tag" == $GLOBALS["xoopsModule"]->getVar("dirname", "n") ) {
-    $GLOBALS["xoopsModuleConfig"] = tag_load_config();
-}
-
-//load_object();
 ?>

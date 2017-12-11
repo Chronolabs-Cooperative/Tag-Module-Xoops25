@@ -1,2 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<{includeq src=$rss_child_template values=$data}>
+<{assign item=levels value=0}>
+<{includeq file=$rss_child_template values=$data levels=$levels}>
