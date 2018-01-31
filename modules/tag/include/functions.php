@@ -275,7 +275,7 @@ function tag_parse_category($catid = 0)
 	$cats = array();
 	$parents = array();
 	$criteria = new CriteriaCompo(new Criteria('tag_catid', $catid));
-	$category_handler = xoops_getModuleHandler('category', 'tag');
+	$category_handler = xoops_getModuleHandler('categories', 'tag');
 	$categorys = $category_handler->getObjects($criteria);
 	if (is_object($categorys[0]))
 	{

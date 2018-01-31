@@ -77,6 +77,7 @@ $GLOBALS['xoTheme']->addStylesheet(XOOPS_URL."/modules/tag/language/".$GLOBALS['
 
 $limit  = empty($tagConfigsList["items_perpage"]) ? 10 : $tagConfigsList["items_perpage"];
 $tag_link_handler = xoops_getmodulehandler("link", "tag");
+$tag_handler = xoops_getmodulehandler("tag", "tag");
 
 $criteriab = new CriteriaCompo(new Criteria('tag_catid', $catid));
 if (basename(__DIR__) != $GLOBALS["xoopsModule"]->getVar("dirname", "n"))
@@ -96,7 +97,7 @@ $criteria->setLimit($limit);
 if (!empty($modid)) {
 	$criteria->add( new Criteria("o.tag_modid", $modid) );
 }
-if ($catid >= 0) {
+if ($catid > 0) {
 	$criteria->add( new Criteria("o.tag_catid", $catid) );
 }
 $items = $tag_handler->getItems($criteria); // Tag, imist, start, sort, order, modid, catid

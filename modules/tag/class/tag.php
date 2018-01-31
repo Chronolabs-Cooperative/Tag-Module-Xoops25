@@ -504,7 +504,7 @@ class TagTagHandler extends XoopsPersistableObjectHandler
      * @param    object    criteria
      * @return     array    associative array of items (id, modid, catid)
      */
-    function &getItems($criteria = null)
+    function getItems($criteria = null)
     {
         $ret = array();
         $sql  = "    SELECT o.tl_id, o.tag_itemid, o.tag_modid, o.tag_catid, o.tag_time";

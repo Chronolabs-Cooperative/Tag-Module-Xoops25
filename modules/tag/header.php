@@ -54,7 +54,7 @@ global $modid, $term, $termid, $catid, $start, $sort, $order, $mode, $dirname;
 
 $dirname	= empty($_GET["dirname"]) ? basename(__DIR__) : $_GET["dirname"];
 $term   	= empty($_GET["term"]) ? '' : $_GET["term"];
-$termid	 	= intval( empty($_GET["id"]) ? 0 : $_GET["id"] );
+$termid	 	= intval( empty($_GET["id"]) ? intval( empty($_GET["termid"]) ? 0 : $_GET["termid"] ) : $_GET["id"] );
 $catid  	= intval( empty($_GET["catid"]) ? 0 : $_GET["catid"] );
 $start  	= intval( empty($_GET["start"]) ? 0 : $_GET["start"] );
 $sort   	= empty($_GET["sort"]) ? "time" : $_GET["sort"] ;

@@ -21,6 +21,7 @@
  */
 if (!defined('XOOPS_ROOT_PATH')) { exit(); }
 
+require_once XOOPS_ROOT_PATH . DS . 'modules' . DS . 'xcenter' . DS . 'header.php';
 /**
  * Get item fields:
  * 
@@ -61,16 +62,19 @@ function xcenter_tag_iteminfo($items)
         foreach (array_keys($items[$cat_id]) as $item_id) {
             $item_obj =& $items_obj[$item_id];
             if (is_object($item_obj))
-			$items[$cat_id][$item_id] = array(
-                "title"     => $item_obj->getVar("subject"),
-                "uid"       => $item_obj->getVar("uid"),
-                "link"      => "index.php?id={$item_id}",
-                "url"       => XOOPS_URL . "/modules/xcenter/index.php?storyid={$item_id}",
-                "time"      => formatTimestamp(strtotime($item_obj->getVar("date")), "s"),
-                "tags"      => tag_parse_tag($item_obj->getVar("tags", "n")),
-                "category"  => tag_parse_category($cat_id),
-                "content"   => $myts->displayTarea($item_obj->getVar("page_description"),true,true,true,true,true,true)
-                );
+            {
+                $iitem = $item_handler->getContent($item_id);
+    			$items[$cat_id][$item_id] = array(
+    			    "title"     => $iitem['text']->getVar("title"),
+                    "uid"       => $item_obj->getVar("uid"),
+                    "link"      => "index.php?id={$item_id}",
+                    "url"       => XOOPS_URL . "/modules/xcenter/index.php?storyid={$item_id}",
+                    "time"      => formatTimestamp(strtotime($item_obj->getVar("date")), "s"),
+                    "tags"      => tag_parse_tag($item_obj->getVar("tags", "n")),
+                    "category"  => tag_parse_category($cat_id),
+                    "content"   => $myts->displayTarea($iitem['text']->getVar("page_description"),true,true,true,true,true,true)
+                    );
+            }
         }
     }
     unset($items_obj);    
@@ -125,7 +129,8 @@ function xcenter_tag_category($catid)
 {
 	$category_handler =& xoops_getmodulehandler('category', 'xcenter');
 	$cat = $category_handler->getCategory($catid);
-	return array('catid' => $cat['cat']->getVar('catid'), 'parentid' => $cat['cat']->getVar('parentid'), 'term' => $cat['text']->getVar('title'));
+	if (is_object($cat['cat']) && is_object($cat['text']))
+	   return array('catid' => $cat['cat']->getVar('catid'), 'parentid' => $cat['cat']->getVar('parent_id'), 'term' => $cat['text']->getVar('title'));
 }
 
 /**

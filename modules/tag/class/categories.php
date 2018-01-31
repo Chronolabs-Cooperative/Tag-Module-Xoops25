@@ -151,7 +151,7 @@ class TagCategoriesHandler extends XoopsPersistableObjectHandler
 		    		if (function_exists($func = $mod->getVar('dirname') . "_tag_category"))
 		    		{
 		    			$cat = $func($parentcat['parentid']);
-		    			$localparentid = self::addCategory($parentcat['term'], $parentcat['catid'], $parentcat['parentid'], $mod);
+		    			$localparentid = self::addCategory($parentcat['catid'], $parentcat['parentid'], $parentcat['term'], $mod);
 		    		}
 		    	}
     			
@@ -168,19 +168,19 @@ class TagCategoriesHandler extends XoopsPersistableObjectHandler
     		$obj->setVar('tag_catid', $localcatid);
     		$obj->setVar('tag_modcatid', $catid);
     		$obj->setVar('tag_parent_mcid', $parentid);
-    		$obj->setVar('tag_modid', $mod->getVar('modid'));
+    		$obj->setVar('tag_modid', $mod->getVar('mid'));
     		$obj->setVar('tag_time', time());
     		$obj->setVar('tag_count', 0);
-    		$cl_id = self::insert($obj, true);
+    		$cl_id = $categories_link_handler->insert($obj, true);
     		
     		return $localcatid;
     	} elseif( self::getCount($criteriab) > 0) {
-    		$catlinkobjs = self::getObjects($criteriab);
-	    	if (!empty($catlinkobjs[0]))
-	    		return $catlinksobjs[0]->getVar('tag_catid');	
+    		$catobjs = self::getObjects($criteriab);
+       		if (is_object($catobjs[0]))
+    		    return $catobjs[0]->getVar('tag_catid');	
     	} else {
     		$catlinkobjs = $categories_link_handler->getObjects($criteria);
-    		if (!empty($catlinkobjs[0]))
+    		if (is_object($catlinkobjs[0]))
     			return $catlinksobjs[0]->getVar('tag_catid');
     	}
     }
@@ -208,7 +208,7 @@ class TagCategoriesHandler extends XoopsPersistableObjectHandler
     			if (function_exists($func = $mod->getVar('dirname') . "_tag_category"))
     			{
     				$cat = $func($modcatid);
-    				return self::addCategory($cat['term'], $cat['catid'], $cat['parentid'], $mod);
+    				return self::addCategory($cat['catid'], $cat['parentid'], $cat['term'], $mod);
     			}
     		}
     	} else {

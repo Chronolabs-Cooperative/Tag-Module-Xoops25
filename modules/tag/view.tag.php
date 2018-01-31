@@ -31,9 +31,10 @@ if (empty($termid) && empty($term) ) {
     redirect_header(XOOPS_URL . "/modules/" . $GLOBALS["xoopsModule"]->getVar("dirname") . "/index.php", 2, TAG_MD_INVALID);
     exit();
 }
+
 $tag_handler =& xoops_getmodulehandler("tag", "tag");
 if (!empty($termid)) {
-    if (!$tag_obj =& $tag_handler->get($termid)) {
+    if (!$tag_obj = $tag_handler->get($termid)) {
         redirect_header(XOOPS_URL . "/modules/" . $GLOBALS["xoopsModule"]->getVar("dirname") . "/index.php", 2, TAG_MD_INVALID);
         exit();
     }
@@ -85,7 +86,7 @@ $criteria->setLimit($limit);
 if (!empty($modid)) {
     $criteria->add( new Criteria("o.tag_modid", $modid) );
 }
-if ($catid >= 0) {
+if (!empty($catid)) {
 	$criteria->add( new Criteria("o.tag_catid", $catid) );
 }
 $items = $tag_handler->getItems($criteria); // Tag, imist, start, sort, order, modid, catid
@@ -112,9 +113,9 @@ if (!empty($items)) {
         $func_support = "{$dirname}_tag_supported";
         if (function_exists($func_support)) {
         	if ($func_support())
-        		$res[$mid]= $func_tag($items_module[$mid]);
+        	    $res[$mid] = $func_tag($items_module[$mid]);
         } else 
-        	$res[$mid]= $func_tag($items_module[$mid]);
+            $res[$mid] = $func_tag($items_module[$mid]);
     }
 }
 
@@ -122,8 +123,8 @@ $items_data = array();
 $uids = array();
 include_once XOOPS_ROOT_PATH . "/modules/tag/include/tagbar.php";
 foreach ($res as $modid => $itemsvalues) {
-	foreach($itemvalues as $catid => $values) {
-		foreach($itemvalues as $itemid => $item) {
+    foreach($itemsvalues as $catid => $values) {
+	    foreach($values as $itemid => $item) {
 			$item["module"]     = $modules_obj[$modid]->getVar("name");
 			$item["dirname"]    = $modules_obj[$modid]->getVar("dirname", "n");
 			$item["tags"]       = @tagBar($item["tags"]);

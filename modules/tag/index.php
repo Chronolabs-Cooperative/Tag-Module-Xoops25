@@ -58,17 +58,17 @@ $criteria = new CriteriaCompo();
 $criteria->setSort("tag_count");
 $criteria->setOrder("DESC");
 $criteria->setLimit(empty($tagConfigsList["limit_tag_cloud"]) ? 100 : $tagConfigsList["limit_tag"]);
-$tags = $tag_handler->getByLimit($criteria);
-
+$tags = $tag_handler->getObjects($criteria, false, false);
 $count_max = 0;
 $count_min = 0;
 $tags_term = array();
 foreach (array_keys($tags) as $key) {
-    if ($tags[$key]["count"] > $count_max) $count_max = $tags[$key]["count"];
-    if ($tags[$key]["count"] < $count_min) $count_min = $tags[$key]["count"];
-    $tags_term[] = strtolower($tags[$key]["term"]);
+    if ($tags[$key]["tag_count"] > $count_max) $count_max = $tags[$key]["tag_count"];
+    if ($tags[$key]["tag_count"] < $count_min) $count_min = $tags[$key]["tag_count"];
+    $tags_term[] = strtolower($tags[$key]["tag_term"]);
 }
 array_multisort($tags_term, SORT_ASC, $tags);
+
 $count_interval = $count_max - $count_min;
 $level_limit = 5;
 
@@ -79,14 +79,17 @@ $font_ratio = ($count_interval) ? ($font_max - $font_min) / $count_interval : 1;
 $tags_data = array();
 foreach (array_keys($tags) as $key) {
     $tags_data[] = array(
-                    "id"    => $tags[$key]["id"],
-                    "font"  => empty($count_interval) ? 100 : floor( ($tags[$key]["count"] - $count_min) * $font_ratio ) + $font_min,
-                    "level" => empty($count_max) ? 0 : floor( ($tags[$key]["count"] - $count_min) * $level_limit / $count_max ),
-                    "term"  => $tags[$key]["term"],
-                    "count" => $tags[$key]["count"],
+                    "id"    => $tags[$key]["tag_id"],
+                    "font"  => empty($count_interval) ? 100 : floor( ($tags[$key]["tag_count"] - $count_min) * $font_ratio ) + $font_min,
+                    "level" => empty($count_max) ? 0 : floor( ($tags[$key]["tag_count"] - $count_min) * $level_limit / $count_max ),
+                    "term"  => $tags[$key]["tag_term"],
+                    "count" => $tags[$key]["tag_count"],
+                    "url"   => XOOPS_URL . '/modules/' .basename(__DIR__) . "/view.tag.php?id=".$tags[$key]["tag_id"]
                     );
 }
 unset($tags, $tags_term);
+
+
 $pagenav = "<a href=\"" . XOOPS_URL . "/modules/tag/list.tag.php\">" . _MORE . "</a>";
 
 if (is_object($GLOBALS["xoopsModule"]) || "tag" != $GLOBALS["xoopsModule"]->getVar("dirname", "n"))
@@ -106,9 +109,7 @@ $GLOBALS['xoopsTpl']->assign("tag_images_path", XOOPS_URL  . "/modules/" . basen
 $GLOBALS['xoopsTpl']->assign("tag_rss_url", $rssurl);
 $GLOBALS['xoopsTpl']->assign("lang_jumpto",      TAG_MD_JUMPTO);
 $GLOBALS['xoopsTpl']->assign("pagenav",          $pagenav);
-$GLOBALS['xoopsTpl']->assign("tag_page_title",   $page_title);
-$GLOBALS['xoopsTpl']->assign_by_ref("tags",      $tags_data);
-$GLOBALS['xoopsTpl']->assign("xoops_pagetitle", $page_title);
+$GLOBALS['xoopsTpl']->assign("tags", $tags_data);
 
 // Display Template
 $GLOBALS['xoopsTpl']->display(__DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . "tag_index.html");
