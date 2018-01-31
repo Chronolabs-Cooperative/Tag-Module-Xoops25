@@ -1,6 +1,6 @@
 ﻿# Tag Module for XOOPS 2.5
 
-## Version 3.09
+## Version 3.10 (stable)
 
 ### Author: Simon Roberts <simon@snails.email>
 

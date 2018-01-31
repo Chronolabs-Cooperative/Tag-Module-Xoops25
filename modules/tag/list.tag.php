@@ -27,6 +27,18 @@ global $modid, $term, $termid, $catid, $start, $sort, $order, $mode, $dirname;
 
 include dirname(__FILE__) . "/header.php";
 
+$tag_handler =& xoops_getmodulehandler("tag", "tag");
+if (!empty($termid)) {
+    if ($tag_obj = $tag_handler->get($termid))
+        $term = $tag_obj->getVar("tag_term", "n");
+} else {
+    if ($tags_obj = $tag_handler->getObjects(new Criteria("tag_term", $myts->addSlashes(trim($term)))))
+    {
+        $tag_obj =& $tags_obj[0];
+        $termid = $tag_obj->getVar("tag_id");
+    }
+}
+
 $mode = empty($mode) ? @$_GET["mode"] : $mode;
 switch (strtolower($mode)) {
 	case "list":
@@ -74,65 +86,101 @@ $criteria->setSort("tag_$sort");
 $criteria->setOrder($order);
 $criteria->setStart($start);
 $criteria->setLimit($limit);
-$criteria->add( new Criteria("o.tag_status", 0) );
+$criteria->add( new Criteria("l.tag_status", 0) );
+if (!empty($termid)) {
+    $criteria->add( new Criteria("o.tag_id", $termid) );
+}
 if (!empty($modid)) {
     $criteria->add( new Criteria("l.tag_modid", $modid) );
 }
-if ($catid >= 0) {
+if (!empty($catid)) {
 	$criteria->add( new Criteria("l.tag_catid", $catid) );
 }
-$tags = $tag_handler->getByLimit($criteria);
+$items = $tag_handler->getItems($criteria);
 
-
-$count_max = 0;
-$count_min = 0;
-$tags_term = array();
-foreach (array_keys($tags) as $key) {
-    if ($tags[$key]["count"] > $count_max) $count_max = $tags[$key]["count"];
-    if ($tags[$key]["count"] < $count_min) $count_min = $tags[$key]["count"];
-    $tags_term[] = strtolower($tags[$key]["term"]);
-}
-array_multisort($tags_term, SORT_ASC, $tags);
-$count_interval = $count_max - $count_min;
-$level_limit = 5;
-
-$font_max = $tagConfigsList["font_max"];
-$font_min = $tagConfigsList["font_min"];
-$font_ratio = ($count_interval) ? ($font_max - $font_min) / $count_interval : 1;
-
-$tags_data = array();
-foreach (array_keys($tags) as $key) {
-	$tag_obj = $tag_handler->get($tags[$key]["id"]);
-    $tags_data[] = array(
-                    	"id"        => $tags[$key]["id"],
-                    	"font"      => empty($count_interval) ? 100 : floor( ($tags[$key]["count"] - $count_min) * $font_ratio ) + $font_min,
-                    	"level"     => empty($count_max) ? 0 : floor( ($tags[$key]["count"] - $count_min) * $level_limit / $count_max ),
-                    	"term"      => $tags[$key]["term"],
-                   		"count"     => $tags[$key]["count"],
-    					"url" 		=> $tag_obj->getURL()
-                    );
-}
-unset($tags, $tags_term);
-
-if ( !empty($start) || count($tags_data) >= $limit) {
-    $count_tag = $tag_handler->getCount($criteria); // modid, catid
-
-    if (strtolower($mode) == "list") {
-        xoops_load("PageNav");
-        $nav = new XoopsPageNav($count_tag, $limit, $start, "start", "catid={$catid}&sort={$sort}&order={$order}&mode={$mode}&dirname={$_GET['dirname']}");
-        $pagenav = $nav->renderNav(4);
-    } else {
-        $pagenav = "<a href=\"" . xoops_getEnv("PHP_SELF") . "?catid={$catid}&amp;mode={$mode}\">" . _MORE . "</a>";
+$items_module = array();
+$modules_obj = $res = array();
+if (!empty($items)) {
+    foreach (array_keys($items) as $key) {
+        $items_module[$items[$key]["modid"]][$items[$key]["catid"]][$items[$key]["itemid"]] = array();
     }
+    $module_handler =& xoops_gethandler('module');
+    $modules_obj = $module_handler->getObjects(new Criteria("mid", "(" . implode(", ", array_keys($items_module)) . ")", "IN"), true);
+    foreach (array_keys($modules_obj) as $mid) {
+        $dirname = $modules_obj[$mid]->getVar("dirname", "n");
+        if (!@include_once XOOPS_ROOT_PATH . "/modules/{$dirname}/include/plugin.tag.php") {
+            if (!@include_once XOOPS_ROOT_PATH . "/modules/tag/plugin/{$dirname}.php") {
+                continue;
+            }
+        }
+        $func_tag = "{$dirname}_tag_iteminfo";
+        if (!function_exists($func_tag)) {
+            continue;
+        }
+        $func_support = "{$dirname}_tag_supported";
+        if (function_exists($func_support)) {
+            if ($func_support())
+                $res[$mid] = $func_tag($items_module[$mid]);
+        } else
+            $res[$mid] = $func_tag($items_module[$mid]);
+    }
+}
+
+$items_data = array();
+$uids = array();
+include_once XOOPS_ROOT_PATH . "/modules/tag/include/tagbar.php";
+foreach ($res as $modid => $itemsvalues) {
+    foreach($itemsvalues as $catid => $values) {
+        foreach($values as $itemid => $item) {
+            $item["module"]     = $modules_obj[$modid]->getVar("name");
+            $item["dirname"]    = $modules_obj[$modid]->getVar("dirname", "n");
+            $item["tags"]       = @tagBar($item["tags"]);
+            $items_data[]       = $item;
+            $uids[$item['uid']] = $item['uid'];
+        }
+    }
+}
+xoops_load("UserUtility");
+$users = XoopsUserUtility::getUnameFromIds(array_keys($uids));
+
+foreach (array_keys($items_data) as $key) {
+    if (isset($items_data[$key]["uid"]) && !empty($items_data[$key]["uid"]) && $items_data[$key]["uid"] != 0)
+    {
+        if (!isset($items_data[$key]["uname"]) || empty($items_data[$key]["uname"]))
+            $items_data[$key]["uname"] = $users[$items_data[$key]["uid"]];
+            $items_data[$key]["userurl"] = XOOPS_URL . '/userinfo.php?uid=' . $items_data[$key]["uid"];
+    }
+}
+
+if ( !empty($start) || count($items_data) >= $limit) {
+    $count_item = $tag_handler->getItemCount($termid, $modid, $catid); // Tag, modid, catid
+    xoops_load('PageNav');
+    $nav = new XoopsPageNav($count_item, $limit, $start, "start", "id={$termid}&catid={$catid}&sort={$sort}&order={$order}&mode={$mode}&dirname={$_GET['dirname']}");
+    $pagenav = $nav->renderNav(4);
 } else {
     $pagenav = "";
 }
 
-$GLOBALS['xoopsTpl']->assign("lang_jumpto", TAG_MD_JUMPTO);
-$GLOBALS['xoopsTpl']->assign("tag_page_title", $page_title);
-$GLOBALS['xoopsTpl']->assign_by_ref("tags", $tags_data);
-$GLOBALS['xoopsTpl']->assign("xoops_pagetitle", $page_title);
+$tag_addon = array();
+if (!empty($GLOBALS["TAG_MD_ADDONS"])) {
+    $tag_addon["title"] = TAG_MD_TAG_ON;
+    foreach ($GLOBALS["TAG_MD_ADDONS"] as $key => $_tag) {
+        $_term = (empty($_tag["function"]) || !function_exists($_tag["function"])) ? $term : $_tag["function"]($term);
+        $tag_addon["addons"][] = "<a href=\"" . sprintf($_tag["link"], urlencode($_term)) . "\" target=\"{$key}\" title=\"{$_tag['title']}\">{$_tag['title']}</a>";
+    }
+}
 
+$GLOBALS['xoopsTpl']->assign("module_name", $GLOBALS["xoopsModule"]->getVar("name"));
+$GLOBALS['xoopsTpl']->assign("tag_id", $termid);
+$GLOBALS['xoopsTpl']->assign("tag_term", $term);
+$GLOBALS['xoopsTpl']->assign("tag_page_title", $page_title);
+$GLOBALS['xoopsTpl']->assign("tag_rss_url", $tag_obj->getRSSURL());
+$GLOBALS['xoopsTpl']->assign("tag_images_path", XOOPS_URL  . "/modules/" . basename(__DIR__) . "/images");
+$GLOBALS['xoopsTpl']->assign_by_ref("tag_addon", $tag_addon);
+$GLOBALS['xoopsTpl']->assign_by_ref("tag_data", $items_data);
+$GLOBALS['xoopsTpl']->assign_by_ref("pagenav", $pagenav);
+$GLOBALS['xoopsTpl']->assign("xoops_pagetitle", $page_title);
+$GLOBALS['xoopsTpl']->assign("tag_bar_template", __DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . "tag_bar.html");
 // Display Template
 $GLOBALS['xoopsTpl']->display(__DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . "tag_list.html");
 

@@ -1,111 +1,49 @@
-<h1>Categories & Tags</h1>
-<table>
-	<{assign var=column value=1}>
-	<{foreach item=$category from=$data}>
-	<{if $column=1}>
-	<tr>
-	<{assign var=column value=2}>
-	<{/if}>
-	<{if $column=4}>
-		<td>
-			<div style="height: auto; valign: middle; text-align: center;">
-				<div style="height: auto; valign: middle; text-align: left;">
-					<font style="165%; font-weight: bold;"><a href="<{$category.url}>"><{$category.title}></a></font>&nbsp;<font style="85%">(<{$category.count}>)</font>
-				</div>
-				<div style="height: auto; valign: middle; text-align: justify;">
-					<{foreach item=tag from=$category.tags}>
-					<font style="69%"><a href="<{$tag.url}>" target="_blank"><{$tag.term}></a></font>;&nbsp;&nbsp;
-					<{/foreach}>
-				</div>
-			</div>
-			<{if isset($category.children)) }>
-			<div style="font-size: 89%; margin-left: 16px; margin-top: 6px;">
-			<{foreach item=$child from=$category.children}>
-				<div style="height: auto; valign: middle; text-align: justify;">
-					<div style="height: auto; valign: middle; text-align: left;">
-						<font style="145%"><a href="<{$child.url}>"><{$child.title}></a></font>&nbsp;<font style="85%">(<{$child.count}>)</font>
-					</div>
-					<div style="height: auto; valign: middle; text-align: justify;">
-						<{foreach item=tag from=$child.tags}>
-						<font style="69%"><a href="<{$tag.url}>" target="_blank"><{$tag.term}></a></font>;&nbsp;&nbsp;
-						<{/foreach}>
-					</div>
-				</div>
+<div style="float: right; padding-right: 20px; width: auto; clear: none;">
+	<a href="<{$tag_rss_url}>" target="_blank"><img src="<{$tag_images_path}>/rss.gif" /></a>
+</div>
+
+<div class="tag-page-title">
+	<h3>
+		<a href="<{$xoops_url}>/modules/<{$xoops_dirname}>/" title="<{$module_name}>"><{$module_name}></a> &raquo; 
+		<a href="<{$xoops_url}>/modules/<{$xoops_dirname}>/list.tag.php" title="<{$smarty.const.TAG_MD_TAGS}>"><{$smarty.const.TAG_MD_TAGS}></a> &raquo; 
+		<a href="<{$xoops_url}>/modules/<{$xoops_dirname}>/view.tag.php?termid=<{$tag_id}>" title="<{$tag_term}>"><{$tag_term}></a>
+	</h3>
+</div>
+
+<div id="pagenav" style="padding-top: 10px; text-align: right;">
+	<{$pagenav}>
+</div>
+
+<div class="tag-item-list" style="padding-top: 10px;">
+<{foreach item=article from=$tag_data}>
+	<div class="tag-item-article" style="padding-top: 10px; padding-bottom: 8px;">
+		<div class="tag-item-categories" style="padding-top: 10px;">
+			<a href="<{$xoops_url}>/modules/<{$article.dirname}>/" title="<{$article.module}>"><{$article.module}></a>
+			<{foreach item=cat from=$article.category}>
+			&nbsp;>>&nbsp;<a href="<{$cat.url}>"><{$cat.term}> <font style="font-size: 0.6667em;">(<{$cat.count}>)</font></a>
 			<{/foreach}>
-			</div>
-			<{/if}>
-		</td>
-	<{assign var=column value=5}>
-	<{/if}
-	<{if $column=3}>
-		<td>
-			<div style="height: auto; valign: middle; text-align: center;">
-				<div style="height: auto; valign: middle; text-align: left;">
-					<font style="165%; font-weight: bold;"><a href="<{$category.url}>"><{$category.title}></a></font>&nbsp;<font style="85%">(<{$category.count}>)</font>
-				</div>
-				<div style="height: auto; valign: middle; text-align: justify;">
-					<{foreach item=tag from=$category.tags}>
-					<font style="69%"><a href="<{$tag.url}>" target="_blank"><{$tag.term}></a></font>;&nbsp;&nbsp;
-					<{/foreach}>
-				</div>
-			</div>
-			<{if isset($category.children)) }>
-			<div style="font-size: 89%; margin-left: 16px; margin-top: 6px;">
-			<{foreach item=$child from=$category.children}>
-				<div style="height: auto; valign: middle; text-align: justify;">
-					<div style="height: auto; valign: middle; text-align: left;">
-						<font style="145%"><a href="<{$child.url}>"><{$child.title}></a></font>&nbsp;<font style="85%">(<{$child.count}>)</font>
-					</div>
-					<div style="height: auto; valign: middle; text-align: justify;">
-						<{foreach item=tag from=$child.tags}>
-						<font style="69%"><a href="<{$tag.url}>" target="_blank"><{$tag.term}></a></font>;&nbsp;&nbsp;
-						<{/foreach}>
-					</div>
-				</div>
-			<{/foreach}>
-			</div>
-			<{/if}>
-		</td>
-	<{assign var=column value=4}>
-	<{/if}>
-	<{if $column=1}>
-		<td>
-			<div style="height: auto; valign: middle; text-align: center;">
-				<div style="height: auto; valign: middle; text-align: left;">
-					<font style="165%; font-weight: bold;"><a href="<{$category.url}>"><{$category.title}></a></font>&nbsp;<font style="85%">(<{$category.count}>)</font>
-				</div>
-				<div style="height: auto; valign: middle; text-align: justify;">
-					<{foreach item=tag from=$category.tags}>
-					<font style="69%"><a href="<{$tag.url}>" target="_blank"><{$tag.term}></a></font>;&nbsp;&nbsp;
-					<{/foreach}>
-				</div>
-			</div>
-			<{if isset($category.children)) }>
-			<div style="font-size: 89%; margin-left: 16px; margin-top: 6px;">
-			<{foreach item=$child from=$category.children}>
-				<div style="height: auto; valign: middle; text-align: justify;">
-					<div style="height: auto; valign: middle; text-align: left;">
-						<font style="145%"><a href="<{$child.url}>"><{$child.title}></a></font>&nbsp;<font style="85%">(<{$child.count}>)</font>
-					</div>
-					<div style="height: auto; valign: middle; text-align: justify;">
-						<{foreach item=tag from=$child.tags}>
-						<font style="69%"><a href="<{$tag.url}>" target="_blank"><{$tag.term}></a></font>;&nbsp;&nbsp;
-						<{/foreach}>
-					</div>
-				</div>
-			<{/foreach}>
-			</div>
-			<{/if}>
-		</td>
-	<{assign var=column value=3}>
-	<{/if}>
-	<{if $column=5}>
-	</tr>
-	<{assign var=column value=1}>
-	<{/if}>
-	<{if $column<5}>
-	<{assign var=columns value=(3-$column-2) }>
-		<td colspan="<{$columns}">&nbsp;</td>
-	</tr>
-	<{/if}<
-</table>
+		</div>
+		<div class="tag-item-title" style="padding-top: 10px;">
+			<a href="<{$article.url}>" title="<{$article.title}>"><{$article.title}></a>
+		</div>
+		<div class="tag-item-meta" style="padding-left: 10px;">
+			<a href="<{$article.userurl}>" title="<{$article.uname}>"><{$article.uname}></a> <{$article.time}><br />
+			<{includeq file=$tag_bar_template tagbar=$article.tags}>
+		</div>
+		<div class="tag-item-content">
+			<{$article.content}>
+		</div>
+	</div>
+<{/foreach}>
+</div>
+
+<{if $tag_addon}>
+<div class="tag-item-meta" style="padding-top: 10px;">
+	<{$tag_addon.title}>:
+	<{foreach item=addon from=$tag_addon.addons}> <{$addon}><{/foreach}> 
+</div>
+<{/if}>
+
+<div id="pagenav" style="padding-top: 10px; text-align: left;">
+	<{$pagenav}>
+</div>

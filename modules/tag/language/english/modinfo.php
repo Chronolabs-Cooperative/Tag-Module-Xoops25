@@ -15,9 +15,9 @@ if (!defined('XOOPS_ROOT_PATH')) { exit(); }
 // Module definition headers for xoops_version.php
 define('URL_DELIMITER', '/');
 define('TAG_MI_NAME','Tags');
-define('TAG_MI_VERSION','3.09');
-define('TAG_MI_RELEASEDATE','2017/08/30');
-define('TAG_MI_STATUS','final minor');
+define('TAG_MI_VERSION','3.10');
+define('TAG_MI_RELEASEDATE','2018/02/01');
+define('TAG_MI_STATUS','stable');
 define('TAG_MI_DESCRIPTION','Tags for XOOPS');
 define('TAG_MI_CREDITS','This module was original developed by XOOPS China (phppp)!');
 define('TAG_MI_AUTHORALIAS','wishcraft');

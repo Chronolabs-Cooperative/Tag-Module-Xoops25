@@ -69,8 +69,8 @@ if ($tagConfigsList['htaccess'])
 
 $module_name = (basename(__DIR__) == $xoopsModule->getVar("dirname", "n")) ? $xoopsConfig["sitename"] : $xoopsModule->getVar("name", "n");
 $page_title = sprintf(TAG_MD_TAGCATEGORYVIEW, htmlspecialchars($cat_obj->getVar('tag_term')), $module_name);
-
 $xoopsOption["xoops_pagetitle"] = strip_tags($page_title);
+
 include XOOPS_ROOT_PATH . "/header.php";
 // Adds Stylesheet
 $GLOBALS['xoTheme']->addStylesheet(XOOPS_URL."/modules/tag/language/".$GLOBALS['xoopsConfig']['language'].'/style.css');
@@ -83,12 +83,15 @@ $criteriab = new CriteriaCompo(new Criteria('tag_catid', $catid));
 if (basename(__DIR__) != $GLOBALS["xoopsModule"]->getVar("dirname", "n"))
 	$criteriab->add(new Criteria('tag_modid', $GLOBALS["xoopsModule"]->getVar('mid')));
 $links = $tag_link_handler->getObjects($criteriab);
-$tagids = array();
+
+$tagterms = $tagids = array();
 foreach($links as $link)
 {
 	$tagids[$link->getVar('tag_id')] = $link->getVar('tag_id');
+	$tagterms[$link->getVar('tag_id')] = $link->getVar('tag_term');
 }
 sort($tagids);
+
 $criteria = new CriteriaCompo(new Criteria("o.tag_id", '(' . implode(", ", $tagids). ")", "IN"));
 $criteria->setSort("tag_$sort");
 $criteria->setOrder($order);
@@ -97,7 +100,7 @@ $criteria->setLimit($limit);
 if (!empty($modid)) {
 	$criteria->add( new Criteria("o.tag_modid", $modid) );
 }
-if ($catid > 0) {
+if (!empty($catid)) {
 	$criteria->add( new Criteria("o.tag_catid", $catid) );
 }
 $items = $tag_handler->getItems($criteria); // Tag, imist, start, sort, order, modid, catid
@@ -124,9 +127,9 @@ if (!empty($items)) {
 		$func_support = "{$dirname}_tag_supported";
 		if (function_exists($func_support)) {
 			if ($func_support())
-				$res = $func_tag($items_module[$mid]);
+			    $res[$mid] = $func_tag($items_module[$mid]);
 		} else
-			$res = $func_tag($items_module[$mid]);
+		    $res[$mid] = $func_tag($items_module[$mid]);
 	}
 }
 
@@ -134,8 +137,8 @@ $items_data = array();
 $uids = array();
 include_once XOOPS_ROOT_PATH . "/modules/tag/include/tagbar.php";
 foreach ($res as $modid => $itemsvalues) {
-	foreach($itemvalues as $catid => $values) {
-		foreach($itemvalues as $itemid => $item) {
+	foreach($itemsvalues as $catid => $values) {
+	    foreach($values as $itemid => $item) {
 			$item["module"]     = $modules_obj[$modid]->getVar("name");
 			$item["dirname"]    = $modules_obj[$modid]->getVar("dirname", "n");
 			$item["tags"]       = @tagBar($item["tags"]);
@@ -155,7 +158,6 @@ foreach (array_keys($items_data) as $key) {
 			$items_data[$key]["userurl"] = XOOPS_URL . '/userinfo.php?uid=' . $items_data[$key]["uid"];
 	}
 }
-
 
 if ( !empty($start) || count($items_data) >= $limit) {
 	$count_item = $tag_handler->getItemCount($termid, $modid, $catid); // Tag, modid, catid

@@ -86,11 +86,11 @@ class TagLinkHandler extends XoopsPersistableObjectHandler
      * @param number $limit
      * @param number $start
      */
-    function getLatestTags($catid = 0, $modid = 0, $limit = 10, $start = 0)
+    function getLatestTags($catid = 0, $modid = 0, $start = 0, $limit = 10, $asarray = false)
     {
         global $tagModule, $tagConfigsList, $tagConfigs, $tagConfigsOptions;
-        
-        $criteria = new CriteriaCompo(new Criteria('tag_time', time(), "<="));
+        $tag_handler = xoops_getModuleHandler('tag', 'tag');
+        $criteria = new CriteriaCompo(new Criteria('1', '1'));
         if (!empty($catid) && $catid<>0)
             $criteria->add(new Criteria('tag_catid', $catid));
         if (!empty($modid) && $modid<>0 && $modid != $tagModule->getVar('mid'))
@@ -101,9 +101,19 @@ class TagLinkHandler extends XoopsPersistableObjectHandler
         $criteria->setLimit($limit);
         $result = array();
         foreach($this->getObjects($criteria) as $key => $link)
-            if (!isset($result[$link->getVar('tag_id')]))
-                $result[$link->getVar('tag_id')] = xoops_getModuleHandler('tag', basename(dirname(__DIR__)))->get($link->getVar('tag_id'));
-            
+        {
+            $criteria = new CriteriaCompo();
+            $criteria->add( new Criteria("l.tag_status", 0) );
+            $criteria->add( new Criteria("o.tag_id", $link->getVar('tag_id')) );
+            if (!empty($modid)) {
+                $criteria->add( new Criteria("l.tag_modid", $modid) );
+            }
+            if (!empty($catid)) {
+                $criteria->add( new Criteria("l.tag_catid", $catid) );
+            }
+            foreach ($tag_handler->getItems($criteria) as $id => $values)
+                $result[] = $values;
+        }
         if (is_array($result) && !empty($result))
             return $result;
         return false;

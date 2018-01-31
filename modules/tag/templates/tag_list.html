@@ -1,27 +1,49 @@
-<!-- phppp (D.J.): http://xoopsforge.com; http://xoops.org.cn -->
+<div style="float: right; padding-right: 20px; width: auto; clear: none;">
+	<a href="<{$tag_rss_url}>" target="_blank"><img src="<{$tag_images_path}>/rss.gif" /></a>
+</div>
 
 <div class="tag-page-title">
-	<h3><a href="<{$xoops_url}>/modules/<{$xoops_dirname}>/list.tag.php" title="<{$tag_page_title}>"><{$tag_page_title}></a></h3>
+	<h3>
+		<a href="<{$xoops_url}>/modules/<{$xoops_dirname}>/" title="<{$module_name}>"><{$module_name}></a> &raquo; 
+		<a href="<{$xoops_url}>/modules/<{$xoops_dirname}>/list.tag.php" title="<{$smarty.const.TAG_MD_TAGS}>"><{$smarty.const.TAG_MD_TAGS}></a> &raquo; 
+		<a href="<{$xoops_url}>/modules/<{$xoops_dirname}>/view.tag.php?termid=<{$tag_id}>" title="<{$tag_term}>"><{$tag_term}></a>
+	</h3>
 </div>
 
-<div class="tag-jumpto" style="padding-top: 10px;">
-	<form id="form-tag-jumpto" name="form-tag-jumpto" action="<{$xoops_url}>/modules/<{$xoops_dirname}>/view.tag.php" method="get">
-	<div>
-	<{$lang_jumpto}>: <input type="text" id="term" name="term" value="" size="20" /> <input type="submit" name="submit" value="<{$smarty.const._SUBMIT}>" />
+<div id="pagenav" style="padding-top: 10px; text-align: right;">
+	<{$pagenav}>
+</div>
+
+<div class="tag-item-list" style="padding-top: 10px;">
+<{foreach item=article from=$tag_data}>
+<div class="tag-item-article" style="padding-top: 10px; padding-bottom: 8px;">
+	<div class="tag-item-categories" style="padding-top: 10px;">
+		<a href="<{$xoops_url}>/modules/<{$article.dirname}>/" title="<{$article.module}>"><{$article.module}></a>
+		<{foreach item=cat from=$article.category}>
+		&nbsp;>>&nbsp;<a href="<{$cat.url}>"><{$cat.term}> <font style="font-size: 0.6667em;">(<{$cat.count}>)</font></a>
+		<{/foreach}>
 	</div>
-	</form>
+	<div class="tag-item-title" style="padding-top: 10px;">
+		<a href="<{$article.url}>" title="<{$article.title}>"><{$article.title}></a>
+	</div>
+	<div class="tag-item-meta" style="padding-left: 10px;">
+		<a href="<{$article.userurl}>" title="<{$article.uname}>"><{$article.uname}></a> <{$article.time}><br />
+		<{includeq file=$tag_bar_template tagbar=$article.tags}>
+	</div>
+	<div class="tag-item-content">
+		<{$article.content}>
+	</div>
 </div>
-
-
-<div class="tag-cloud" style="margin-top: 10px; padding: 10px; border: solid 2px #ddd; line-height: 150%;">
-<{foreach item=tag from=$tags}>
-<span class="tag-item tag-level-<{$tag.level}>" style="font-size: <{$tag.font}>%; margin-right: 5px;">
-	<a href="<{$tag.url}>" title="<{$tag.term}>"><{$tag.term}></a>
-</span>
 <{/foreach}>
 </div>
 
+<{if $tag_addon}>
+<div class="tag-item-meta" style="padding-top: 10px;">
+	<{$tag_addon.title}>:
+	<{foreach item=addon from=$tag_addon.addons}> <{$addon}><{/foreach}> 
+</div>
+<{/if}>
 
-<div id="pagenav" style="padding-top: 10px;">
-<{$pagenav}>
+<div id="pagenav" style="padding-top: 10px; text-align: left;">
+	<{$pagenav}>
 </div>

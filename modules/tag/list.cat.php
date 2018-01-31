@@ -27,160 +27,187 @@ global $modid, $term, $termid, $catid, $start, $sort, $order, $mode, $dirname;
 
 include dirname(__FILE__) . "/header.php";
 
+$categories_handler = xoops_getmodulehandler("categories", "tag");
+if (!empty($termid)) {
+    if ($cat_obj =& $categories_handler->get($termid)) {
+        $catid = $cat_obj->getVar("tag_catid", "n");
+        $term = $cat_obj->getVar("tag_term");
+    }
+} else {
+    if ($cat_obj= $categories_handler->getObjects(new Criteria("tag_term", $myts->addSlashes(trim($term))))) {
+        $cat_obj=& $tags_obj[0];
+        $catid = $cat_obj->getVar("tag_catid", "n");
+        $term = $cat_obj->getVar("tag_term");
+    }
+}
+
+if (empty($catid) || $catid == 0)
+{
+    redirect_header(XOOPS_URL . "/modules/" . $GLOBALS["xoopsModule"]->getVar("dirname") . "/index.php", 2, TAG_MD_INVALID);
+    exit();
+}
+
+$mode = empty($mode) ? @$_GET["mode"] : $mode;
+switch (strtolower($mode)) {
+    case "list":
+        $mode = "list";
+        $sort    = "count";
+        $order    = "DESC";
+        $limit = empty($tagConfigsList["limit_tag_list"]) ? 10 : $tagConfigsList["limit_tag"];
+        break;
+    case "cloud":
+    default:
+        $mode = "cloud";
+        $sort    = "count";
+        $order    = "DESC";
+        $limit = empty($tagConfigsList["limit_tag_cloud"]) ? 100 : $tagConfigsList["limit_tag"];
+        break;
+}
+
 if ($tagConfigsList['htaccess'])
 {
-	if (is_object($GLOBALS["xoopsModule"]) || basename(__DIR__) != $GLOBALS["xoopsModule"]->getVar("dirname", "n")) {
-		$url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/list/cat/$start/$sort/$order/$mode/$termid-" . $GLOBALS["xoopsModule"]->getVar("dirname", "n") . $tagConfigsList['html'];
-	} else {
-		$url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/list/cat/$start/$sort/$order/$mode/$termid" . $tagConfigsList['html'];
-	}
-	if (!strpos($url, $_SERVER["REQUEST_URI"]))
-	{
-		redirect_header($url, 0, "");
-		exit(0);
-	}
+    if (is_object($GLOBALS["xoopsModule"]) || "tag" != $GLOBALS["xoopsModule"]->getVar("dirname", "n")) {
+        $url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/list/cat/$start/$sort/$order/$mode/$termid-" . $GLOBALS["xoopsModule"]->getVar("dirname", "n") . $tagConfigsList['html'];
+    } else {
+        $url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/list/cat/$start/$sort/$order/$mode/$termid" . $tagConfigsList['html'];
+    }
+    if (!strpos($url, $_SERVER["REQUEST_URI"]))
+    {
+        redirect_header($url, 0, "");
+        exit(0);
+    }
 }
-$result = array();
-$categories_handler = xoops_getModuleHandler("categories", "tag");
-$tag_handler = xoops_getmodulehandler("tag", "tag");
-$tag_link_handler = xoops_getmodulehandler("link", "tag");
-if ($termid == 0)
-{
-	$criteria = new Criteria('tag_parent_catid', 0);
-} else {
-	$criteria = new Criteria('tag_catid', $termid);
-}
+
+$module_name = ("tag" == $xoopsModule->getVar("dirname")) ? $xoopsConfig["sitename"] : $xoopsModule->getVar("name");
+$page_title = sprintf(TAG_MD_TAGLIST, $module_name);
+
+$xoopsOption["xoops_pagetitle"] = strip_tags($page_title);
+include XOOPS_ROOT_PATH . "/header.php";
+
+// Adds Stylesheet
+$GLOBALS['xoTheme']->addStylesheet(XOOPS_URL."/modules/tag/language/".$GLOBALS['xoopsConfig']['language'].'/style.css');
+$module_name = (basename(__DIR__) == $xoopsModule->getVar("dirname", "n")) ? $xoopsConfig["sitename"] : $xoopsModule->getVar("name", "n");
+$page_title = sprintf(TAG_MD_TAGCATEGORYVIEW, htmlspecialchars($cat_obj->getVar('tag_term')), $module_name);
+$xoopsOption["xoops_pagetitle"] = strip_tags($page_title);
+
 include XOOPS_ROOT_PATH . "/header.php";
 // Adds Stylesheet
 $GLOBALS['xoTheme']->addStylesheet(XOOPS_URL."/modules/tag/language/".$GLOBALS['xoopsConfig']['language'].'/style.css');
-$limit  = empty($tagConfigsList["items_perpage"]) ? 10 : $tagConfigsList["items_perpage"];
 
-$categories = $categories_handler->getObjects($criteria);
-foreach($categories as $category)
+$limit  = empty($tagConfigsList["items_perpage"]) ? 10 : $tagConfigsList["items_perpage"];
+$tag_link_handler = xoops_getmodulehandler("link", "tag");
+$tag_handler = xoops_getmodulehandler("tag", "tag");
+
+$criteriab = new CriteriaCompo(new Criteria('tag_catid', $catid));
+if (basename(__DIR__) != $GLOBALS["xoopsModule"]->getVar("dirname", "n"))
+    $criteriab->add(new Criteria('tag_modid', $GLOBALS["xoopsModule"]->getVar('mid')));
+$links = $tag_link_handler->getObjects($criteriab);
+
+$tagterms = $tagids = array();
+foreach($links as $link)
 {
-	$result[$category->getVar('tag_catid')]['url'] = $category->getURL();
-	$result[$category->getVar('tag_catid')]['title'] = $category->getVar('tag_term');
-	$result[$category->getVar('tag_catid')]['count'] = $category->getVar('tag_count');
-	switch ($order)
-	{
-		default:
-		case "time":
-			$criteriab = new CriteriaCompo(new Criteria('tag_catid', $category->getVar('tag_catid')));
-			if (basename(__DIR__) != $GLOBALS["xoopsModule"]->getVar("dirname", "n"))
-				$criteriab->add(new Criteria('tag_modid', $GLOBALS["xoopsModule"]->getVar('mid')));
-			$criteriab->setSort('tag_time');
-			$criteriab->setOrder('ASC');
-			$criteriab->setStart(0);
-			$criteriab->setLimit($limit);
-			$links = $tag_link_handler->getObjects($criteriab);
-			$tagids = array();
-			foreach($links as $link)
-			{
-				$tagids[$link->getVar('tag_id')] = $link->getVar('tag_id');
-			}
-			break;
-		case "count":
-			$criteriab = new CriteriaCompo(new Criteria('tag_catid', $category->getVar('tag_catid')));
-			if (basename(__DIR__) != $GLOBALS["xoopsModule"]->getVar("dirname", "n"))
-				$criteriab->add(new Criteria('tag_modid', $GLOBALS["xoopsModule"]->getVar('mid')));
-			$links = $tag_link_handler->getObjects($criteriab);
-			$tmpids = array();
-			foreach($links as $link)
-			{
-				$tmpids[$link->getVar('tag_id')] = $link->getVar('tag_id');
-			}
-			$criteriac = new CriteriaCompo(new Criteria('tag_id', '(' . implode(", ", $tmpids). ")", "IN"));
-			$criteriac->setSort('tag_count');
-			$criteriac->setOrder('DESC');
-			$criteriac->setStart(0);
-			$criteriac->setLimit($limit);
-			$tags = $tag_handler->getObjects($criteriac);
-			$tagids = array();
-			foreach($tags as $tag)
-			{
-				$tagids[$tag->getVar('tag_id')] = $tag->getVar('tag_id');
-			}
-	}
-	if (!empty($tagids))
-	{
-		$criteriad = new CriteriaCompo(new Criteria('tag_id', '(' . implode(", ", $tagids). ")", "IN"));
-		$tags = $tag_handler->getObjects($criteriac);
-		foreach($tags as $tag)
-		{
-			$result[$category->getVar('tag_catid')]['tags'][$tag->getVar('tag_id')]['term'] = $tag->getVar('tag_term');
-			$result[$category->getVar('tag_catid')]['tags'][$tag->getVar('tag_id')]['url'] = $tag->getURL();
-		}
-	}
-	$criteriab = new Criteria('tag_parent_catid', $category->getVar('tag_catid'));
-	$children = $categories_handler->getObjects($criteria);
-	foreach($children as $child)
-	{
-		$result[$category->getVar('tag_catid')]['children'][$child->getVar('tag_catid')]['url'] = $child->getURL();
-		$result[$category->getVar('tag_catid')]['children'][$child->getVar('tag_catid')]['title'] = $child->getVar('tag_term');
-		$result[$category->getVar('tag_catid')]['children'][$child->getVar('tag_catid')]['count'] = $child->getVar('tag_count');
-		switch ($order)
-		{
-			default:
-			case "time":
-				$criteriab = new CriteriaCompo(new Criteria('tag_catid', $child->getVar('tag_catid')));
-				if (basename(__DIR__) != $GLOBALS["xoopsModule"]->getVar("dirname", "n"))
-					$criteriab->add(new Criteria('tag_modid', $GLOBALS["xoopsModule"]->getVar('mid')));
-				$criteriab->setSort('tag_time');
-				$criteriab->setOrder('ASC');
-				$criteriab->setStart(0);
-				$criteriab->setLimit($limit/2);
-				$links = $tag_link_handler->getObjects($criteriab);
-				$tagids = array();
-				foreach($links as $link)
-				{
-					$tagids[$link->getVar('tag_id')] = $link->getVar('tag_id');
-				}
-				break;
-			case "count":
-				$criteriab = new CriteriaCompo(new Criteria('tag_catid', $child->getVar('tag_catid')));
-				if (basename(__DIR__) != $GLOBALS["xoopsModule"]->getVar("dirname", "n"))
-					$criteriab->add(new Criteria('tag_modid', $GLOBALS["xoopsModule"]->getVar('mid')));
-				$links = $tag_link_handler->getObjects($criteriab);
-				$tmpids = array();
-				foreach($links as $link)
-				{
-					$tmpids[$link->getVar('tag_id')] = $link->getVar('tag_id');
-				}
-				$criteriac = new CriteriaCompo(new Criteria('tag_id', '(' . implode(", ", $tmpids). ")", "IN"));
-				$criteriac->setSort('tag_count');
-				$criteriac->setOrder('DESC');
-				$criteriac->setStart(0);
-				$criteriac->setLimit($limit/2);
-				$tags = $tag_handler->getObjects($criteriac);
-				$tagids = array();
-				foreach($tags as $tag)
-				{
-					$tagids[$tag->getVar('tag_id')] = $tag->getVar('tag_id');
-				}
-				break;
-		}
-		if (!empty($tagids))
-		{
-			$criteriad = new CriteriaCompo(new Criteria('tag_id', '(' . implode(", ", $tagids). ")", "IN"));
-			$tags = $tag_handler->getObjects($criteriac);
-			foreach($tags as $tag)
-			{
-				$result[$category->getVar('tag_catid')]['children'][$child->getVar('tag_catid')]['tags'][$tag->getVar('tag_id')]['term'] = $tag->getVar('tag_term');
-				$result[$category->getVar('tag_catid')]['children'][$child->getVar('tag_catid')]['tags'][$tag->getVar('tag_id')]['url'] = $tag->getURL();
-			}
-		}
-	}
+    $tagids[$link->getVar('tag_id')] = $link->getVar('tag_id');
+    $tagterms[$link->getVar('tag_id')] = $link->getVar('tag_term');
+}
+sort($tagids);
+
+$criteria = new CriteriaCompo(new Criteria("o.tag_id", '(' . implode(", ", $tagids). ")", "IN"));
+$criteria->setSort("tag_$sort");
+$criteria->setOrder($order);
+$criteria->setStart($start);
+$criteria->setLimit($limit);
+if (!empty($modid)) {
+    $criteria->add( new Criteria("o.tag_modid", $modid) );
+}
+if (!empty($catid)) {
+    $criteria->add( new Criteria("o.tag_catid", $catid) );
+}
+$items = $tag_handler->getItems($criteria); // Tag, imist, start, sort, order, modid, catid
+
+
+$items_module = array();
+$modules_obj = $res = array();
+if (!empty($items)) {
+    foreach (array_keys($items) as $key) {
+        $items_module[$items[$key]["modid"]][$items[$key]["catid"]][$items[$key]["itemid"]] = array();
+    }
+    $module_handler =& xoops_gethandler('module');
+    $modules_obj = $module_handler->getObjects(new Criteria("mid", "(" . implode(", ", array_keys($items_module)) . ")", "IN"), true);
+    foreach (array_keys($modules_obj) as $mid) {
+        $dirname = $modules_obj[$mid]->getVar("dirname", "n");
+        if (!@include_once XOOPS_ROOT_PATH . "/modules/{$dirname}/include/plugin.tag.php") {
+            if (!@include_once XOOPS_ROOT_PATH . "/modules/tag/plugin/{$dirname}.php") {
+                continue;
+            }
+        }
+        $func_tag = "{$dirname}_tag_iteminfo";
+        if (!function_exists($func_tag)) {
+            continue;
+        }
+        $func_support = "{$dirname}_tag_supported";
+        if (function_exists($func_support)) {
+            if ($func_support())
+                $res[$mid] = $func_tag($items_module[$mid]);
+        } else
+            $res[$mid] = $func_tag($items_module[$mid]);
+    }
 }
 
-$module_name = (basename(__DIR__) == $xoopsModule->getVar("dirname")) ? $xoopsConfig["sitename"] : $xoopsModule->getVar("name");
-$page_title = sprintf(TAG_MD_TAGLIST, $module_name);
-$xoopsOption["xoops_pagetitle"] = strip_tags($page_title);
+$items_data = array();
+$uids = array();
+include_once XOOPS_ROOT_PATH . "/modules/tag/include/tagbar.php";
+foreach ($res as $modid => $itemsvalues) {
+    foreach($itemsvalues as $catid => $values) {
+        foreach($values as $itemid => $item) {
+            $item["module"]     = $modules_obj[$modid]->getVar("name");
+            $item["dirname"]    = $modules_obj[$modid]->getVar("dirname", "n");
+            $item["tags"]       = @tagBar($item["tags"]);
+            $items_data[]       = $item;
+            $uids[$item['uid']] = $item['uid'];
+        }
+    }
+}
+xoops_load("UserUtility");
+$users = XoopsUserUtility::getUnameFromIds(array_keys($uids));
 
-$GLOBALS['xoopsTpl']->assign("data", $result);
-$GLOBALS['xoopsTpl']->assign("lang_jumpto", TAG_MD_JUMPTO);
+foreach (array_keys($items_data) as $key) {
+    if (isset($items_data[$key]["uid"]) && !empty($items_data[$key]["uid"]) && $items_data[$key]["uid"] != 0)
+    {
+        if (!isset($items_data[$key]["uname"]) || empty($items_data[$key]["uname"]))
+            $items_data[$key]["uname"] = $users[$items_data[$key]["uid"]];
+            $items_data[$key]["userurl"] = XOOPS_URL . '/userinfo.php?uid=' . $items_data[$key]["uid"];
+    }
+}
+
+if ( !empty($start) || count($items_data) >= $limit) {
+    $count_item = $tag_handler->getItemCount($termid, $modid, $catid); // Tag, modid, catid
+    xoops_load('PageNav');
+    $nav = new XoopsPageNav($count_item, $limit, $start, "start", "id={$termid}&catid={$catid}&sort={$sort}&order={$order}&mode={$mode}&dirname={$_GET['dirname']}");
+    $pagenav = $nav->renderNav(4);
+} else {
+    $pagenav = "";
+}
+
+$tag_addon = array();
+if (!empty($GLOBALS["TAG_MD_ADDONS"])) {
+    $tag_addon["title"] = TAG_MD_TAG_ON;
+    foreach ($GLOBALS["TAG_MD_ADDONS"] as $key => $_tag) {
+        $_term = (empty($_tag["function"]) || !function_exists($_tag["function"])) ? $term : $_tag["function"]($term);
+        $tag_addon["addons"][] = "<a href=\"" . sprintf($_tag["link"], urlencode($_term)) . "\" target=\"{$key}\" title=\"{$_tag['title']}\">{$_tag['title']}</a>";
+    }
+}
+
+$GLOBALS['xoopsTpl']->assign("module_name", $GLOBALS["xoopsModule"]->getVar("name"));
+$GLOBALS['xoopsTpl']->assign("tag_id", $termid);
+$GLOBALS['xoopsTpl']->assign("tag_term", $term);
 $GLOBALS['xoopsTpl']->assign("tag_page_title", $page_title);
+$GLOBALS['xoopsTpl']->assign("tag_rss_url", $cat_obj->getRSSURL());
+$GLOBALS['xoopsTpl']->assign("tag_images_path", XOOPS_URL  . "/modules/" . basename(__DIR__) . "/images");
+$GLOBALS['xoopsTpl']->assign_by_ref("tag_addon", $tag_addon);
+$GLOBALS['xoopsTpl']->assign_by_ref("tag_data", $items_data);
+$GLOBALS['xoopsTpl']->assign_by_ref("pagenav", $pagenav);
 $GLOBALS['xoopsTpl']->assign("xoops_pagetitle", $page_title);
-
+$GLOBALS['xoopsTpl']->assign("tag_bar_template", __DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . "tag_bar.html");
 // Display Template
 $GLOBALS['xoopsTpl']->display(__DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . "tag_category_list.html");
 

@@ -396,7 +396,7 @@ class TagTagHandler extends XoopsPersistableObjectHandler
      * @param    boolean    $fromStats    fetch from tag-stats table
      * @return     array    associative array of tags (id, term, count)
      */
-    function &getByLimit($criteria = null, $fromStats = true)
+    function getByLimit($criteria = null, $fromStats = true)
     {
         $ret = array();
         if ($fromStats) {
@@ -418,7 +418,7 @@ class TagTagHandler extends XoopsPersistableObjectHandler
             $limit = $criteria->getLimit();
             $start = $criteria->getStart();
         }
-        $sql  .= "    GROUP BY o.{$this->keyName}";
+        $sql  .= "    GROUP BY o.{$this->keyName}, l.tag_modid";
         
         $order = strtoupper($order);
         $sort = strtolower($sort);
@@ -445,13 +445,33 @@ class TagTagHandler extends XoopsPersistableObjectHandler
             //xoops_error($GLOBALS['xoopsDB']->error());
             return null;
         }
+        global $tagModule, $tagConfigsList, $tagConfigs, $tagConfigsOptions;
+        global $modid, $term, $termid, $catid, $start, $sort, $order, $mode, $dirname;
+        
         while($myrow = $GLOBALS['xoopsDB']->fetchArray($result)) {
+            $start = 0;
+            $sort = "DESC";
+            $order = "count";
+            $mode = "list";
+            $term = $myrow['tag_term'];
+            if ($tagConfigsList['htaccess'])
+            {
+                if (is_object($GLOBALS["xoopsModule"]) || "tag" != $GLOBALS["xoopsModule"]->getVar("dirname", "n")) {
+                    $url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/view/tag/$start/$sort/$order/$mode/$term-" . $GLOBALS["xoopsModule"]->getVar("dirname", "n") . $tagConfigsList['html'];
+                    
+                } else {
+                    $url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/view/tag/$start/$sort/$order/$mode/$term" . $tagConfigsList['html'];
+                }
+            } else {
+                $url = XOOPS_URL . "/modules/".basename(dirname(__DIR__)) . "/view.tag.php?start=$start&sort=$sort&order=$order&mode=$mode&term=$term";
+            }
             $ret[$myrow[$this->keyName]] = array(
-                        "id"    => $myrow[$this->keyName],
-                        "term"    => htmlspecialchars($myrow["tag_term"]),
-                        "status"=> $myrow["tag_status"],
-                        "modid"    => $myrow["tag_modid"],
-                        "count"    => intval($myrow["count"]),
+                        "id"        => $myrow[$this->keyName],
+                        "term"      => htmlspecialchars($myrow["tag_term"]),
+                        "status"    => $myrow["tag_status"],
+                        "modid"     => $myrow["tag_modid"],
+                        "count"     => intval($myrow["count"]),
+                        "url"       => $url,
                         );
         }
         
@@ -507,7 +527,7 @@ class TagTagHandler extends XoopsPersistableObjectHandler
     function getItems($criteria = null)
     {
         $ret = array();
-        $sql  = "    SELECT o.tl_id, o.tag_itemid, o.tag_modid, o.tag_catid, o.tag_time";
+        $sql  = "    SELECT o.tl_id, o.tag_itemid, o.tag_id, o.tag_modid, o.tag_catid, o.tag_time, l.tag_term";
         $sql .= "    FROM {$this->table_link} AS o LEFT JOIN {$this->table} AS l ON l.{$this->keyName} = o.{$this->keyName}";
         
         $limit = null;
@@ -547,11 +567,29 @@ class TagTagHandler extends XoopsPersistableObjectHandler
             return $ret;
         }
         while ($myrow = $GLOBALS['xoopsDB']->fetchArray($result)) {
+            $start = 0;
+            $sort = "DESC";
+            $order = "count";
+            $mode = "list";
+            $term = $myrow['tag_term'];
+            if ($tagConfigsList['htaccess'])
+            {
+                if (is_object($GLOBALS["xoopsModule"]) || "tag" != $GLOBALS["xoopsModule"]->getVar("dirname", "n")) {
+                    $url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/view/tag/$start/$sort/$order/$mode/$term-" . $GLOBALS["xoopsModule"]->getVar("dirname", "n") . $tagConfigsList['html'];
+                    
+                } else {
+                    $url = XOOPS_URL . "/" . $tagConfigsList['base'] . "/view/tag/$start/$sort/$order/$mode/$term" . $tagConfigsList['html'];
+                }
+            } else {
+                $url = XOOPS_URL . "/modules/".basename(dirname(__DIR__)) . "/view.tag.php?start=$start&sort=$sort&order=$order&mode=$mode&term=$term";
+            }
             $ret[$myrow["tl_id"]] = array(
                         "itemid"    => $myrow["tag_itemid"],
+                        "tagid"     => $myrow["tag_id"],
                         "modid"     => $myrow["tag_modid"],
                         "catid"     => $myrow["tag_catid"],
                         "time"      => $myrow["tag_time"],
+                        "url"       => $url,
                         );
         }
         
@@ -588,7 +626,7 @@ class TagTagHandler extends XoopsPersistableObjectHandler
         if (!empty($modid)) {
             $sql_where .= " AND o.tag_modid = {$modid}";
         }
-        if (empty($catid) || $catid > 0) {
+        if (!empty($catid)) {
             $sql_where .= " AND o.tag_catid = {$catid}";
         }
         

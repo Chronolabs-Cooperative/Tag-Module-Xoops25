@@ -34,7 +34,7 @@ class TagCategories extends XoopsObject
      *
      * @param int $id ID of the tag, deprecated
      */
-	function TagCategories($id = null)
+	function __construct($id = null)
     {
         $this->initVar("tag_catid",            XOBJ_DTYPE_INT,     null, false);
         $this->initVar("tag_parent_catid",            XOBJ_DTYPE_INT,     null, false);
@@ -212,9 +212,9 @@ class TagCategoriesHandler extends XoopsPersistableObjectHandler
     			}
     		}
     	} else {
-    		$catlinkobjs = $categories_link_handler->getObjects($criteria);
-    		if (!empty($catlinkobjs[0]))
-    			return $catlinksobjs[0]->getVar('tag_catid');
+    		$catobjs = $categories_link_handler->getObjects($criteria);
+    		if (is_a($catobjs[0], 'TagCategories_link') && !is_null($catobjs[0]))
+    		    return $catobjs[0]->getVar('tag_catid');
     	}
     }
 }

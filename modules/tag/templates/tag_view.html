@@ -16,23 +16,24 @@
 
 <div class="tag-item-list" style="padding-top: 10px;">
 <{foreach item=article from=$tag_data}>
-	<div class="tag-item-categories" style="padding-top: 10px;">
-		<a href="<{$xoops_url}>/modules/<{$article.dirname}>/" title="<{$article.module}>"><{$article.module}></a>
-		<{foreach item=cat from=$article.category}>
-		&nbsp;>>&nbsp;<a href="<{$cat.url}>"><{$cat.term}> <font style="font-size: 0.6667em;">(<{$cat.count}>)</font></a>
-		<{/foreach}>
+	<div class="tag-item-article" style="padding-top: 10px; padding-bottom: 8px;">
+		<div class="tag-item-categories" style="padding-top: 10px;">
+			<a href="<{$xoops_url}>/modules/<{$article.dirname}>/" title="<{$article.module}>"><{$article.module}></a>
+			<{foreach item=cat from=$article.category}>
+			&nbsp;>>&nbsp;<a href="<{$cat.url}>"><{$cat.term}> <font style="font-size: 0.6667em;">(<{$cat.count}>)</font></a>
+			<{/foreach}>
+		</div>
+		<div class="tag-item-title" style="padding-top: 10px;">
+			<a href="<{$article.url}>" title="<{$article.title}>"><{$article.title}></a>
+		</div>
+		<div class="tag-item-meta" style="padding-left: 10px;">
+			<a href="<{$article.userurl}>" title="<{$article.uname}>"><{$article.uname}></a> <{$article.time}><br />
+			<{includeq file=$tag_bar_template tagbar=$article.tags}>
+		</div>
+		<div class="tag-item-content">
+			<{$article.content}>
+		</div>
 	</div>
-	<div class="tag-item-title" style="padding-top: 10px;">
-		<a href="<{$article.url}>" title="<{$article.title}>"><{$article.title}></a>
-	</div>
-	<div class="tag-item-meta" style="padding-left: 10px;">
-		<a href="<{$article.userurl}>" title="<{$article.uname}>"><{$article.uname}></a> <{$article.time}><br />
-		<{includeq file=$tag_bar_template tagbar=$article.tags}>
-	</div>
-	<div class="tag-item-content">
-		<{$article.content}>
-	</div>
-
 <{/foreach}>
 </div>
 

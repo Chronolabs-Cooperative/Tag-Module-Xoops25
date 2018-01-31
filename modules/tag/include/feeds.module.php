@@ -42,7 +42,7 @@ if (!function_exists("tag_feed_tags"))
         global $modid, $term, $termid, $catid, $start, $sort, $order, $mode, $dirname;
         
         $link_handler = xoops_getmodulehandler("link", "tag");
-        $items = $link_handler->getLatestTags($catid, $modid, $limit, $start);
+        $items = $link_handler->getLatestTags($catid, $modid, $limit, $start, true);
         
         $items_module = array();
         $modules_obj = $res = array();
@@ -55,7 +55,7 @@ if (!function_exists("tag_feed_tags"))
             foreach (array_keys($modules_obj) as $mid) {
                 $dirname = $modules_obj[$mid]->getVar("dirname", "n");
                 if (!@include_once XOOPS_ROOT_PATH . "/modules/{$dirname}/include/plugin.tag.php") {
-                    if (!@include_once XOOPS_ROOT_PATH . "/modules/tag/plugin/{$dirname}.php") {
+                    if (!@include_once (XOOPS_ROOT_PATH . "/modules/tag/plugin/{$dirname}.php")) {
                         continue;
                     }
                 }
@@ -71,13 +71,13 @@ if (!function_exists("tag_feed_tags"))
                     $res[$mid]= $func_tag($items_module[$mid]);
             }
         }
-        
+
         $rssitems = $rssitem = array();
         $uids = array();
         include_once XOOPS_ROOT_PATH . "/modules/tag/include/tagbar.php";
         foreach ($res as $modid => $itemsvalues) {
-            foreach($itemvalues as $catid => $values) {
-                foreach($itemvalues as $itemid => $item) {
+            foreach($itemsvalues as $catid => $values) {
+                foreach($values as $itemid => $item) {
                     $rssitem = array();
                     $rssitem["category"]   = $modules_obj[$modid]->getVar("name");
                     $rssitem["guid"]       = $item['uid'] . '-' . $modules_obj[$modid]->getVar("dirname", "n").'-'.md5(json_encode($item));
@@ -91,7 +91,6 @@ if (!function_exists("tag_feed_tags"))
                 }
             }
         }
-        
         if (is_array($rssitems) && count($rssitems) > 0 && !empty($rssitems))
         {
             return $rssitems;

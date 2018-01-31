@@ -22,3 +22,16 @@
 .tag-level-5 a {
 	color: #FF7400;
 }
+
+.tag-item-article, #tag-item-article
+{
+	border-radius:	10px;
+	border: 		2px dotted #111111;
+    box-shadow: 	-4px 6px 11px #fefbfe;
+	margin-top:		14px;
+	margin-bottom:	7px;
+	display: 		block;
+	color: 			#020304 !important;
+	line-spacing: 	1.77em;
+	padding:		11px;
+}

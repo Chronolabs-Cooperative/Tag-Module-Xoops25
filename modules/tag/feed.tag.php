@@ -104,7 +104,9 @@ if (!$tpl->is_cached(__DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEP
     }
     $channel['image']['width'] = $width;
     $channel['image']['height'] = $height;
+    
     $items = tag_feed_tags($catid, $modid, $tagConfigList['items_perfeeds'], 0);
+
     $keys = array_keys($items);
     sort($keys, SORT_DESC);
     foreach($keys as $key)

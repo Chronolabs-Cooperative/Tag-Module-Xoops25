@@ -44,6 +44,8 @@ function tagBar($tags, $catid = 0, $modid = 0)
     
     if (empty($tags)) return array();
     
+    $GLOBALS['xoTheme']->addStylesheet(XOOPS_URL."/modules/tag/language/".$GLOBALS['xoopsConfig']['language'].'/tagbar.css');
+    
     if (!isset($loaded)):
     include XOOPS_ROOT_PATH . "/modules/tag/include/vars.php";
     include_once XOOPS_ROOT_PATH . "/modules/tag/include/functions.php";
@@ -52,7 +54,7 @@ function tagBar($tags, $catid = 0, $modid = 0)
         xoops_loadLanguage("main", "tag");
     }
     $loaded = 1;
-    $delimiter = @file_exists(XOOPS_ROOT_PATH . "/modules/tag/images/delimiter.gif") ? "<img src=\"" . XOOPS_URL . "/modules/tag/images/delimiter.gif\" alt=\"\" />" : "<img src=\"" . XOOPS_URL . "/images/pointer.gif\" alt=\"\" />";
+    $delimiter = @file_exists(XOOPS_ROOT_PATH . "/modules/tag/images/delimiter.gif") ? "<img src=\"" . XOOPS_URL . "/modules/tag/images/delimiter.gif\" alt=\"\" id='tagbar_delimiter' class='tagbar_delimiter'/>" : "<img src=\"" . XOOPS_URL . "/images/pointer.gif\" alt=\"\" />";
     endif;
     
     // itemid
@@ -74,7 +76,7 @@ function tagBar($tags, $catid = 0, $modid = 0)
     }
     $tags_data = array();
     foreach ($tags as $tag) {
-        $tags_data[] = "<a href=\"" . XOOPS_URL . "/modules/" . $GLOBALS["xoopsModule"]->getVar("dirname") . "/view.tag.php" . URL_DELIMITER . urlencode($tag) . "\" title=\"" . htmlspecialchars($tag) . "\">" . htmlspecialchars($tag) . "</a>";
+        $tags_data[] = "<a id='tagbar_tag' class='tagbar_tag' href=\"" . XOOPS_URL . "/modules/" . $GLOBALS["xoopsModule"]->getVar("dirname") . "/view.tag.php?term=" . urlencode($tag) . "\" title=\"" . htmlspecialchars($tag) . "\">" . htmlspecialchars($tag) . "</a>";
     }
     return array(
             "title"     => TAG_MD_TAGS, 
